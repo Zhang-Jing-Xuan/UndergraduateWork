@@ -1,2 +1,2 @@
-# Computing-Method
+# Computational-Method
 Homework
