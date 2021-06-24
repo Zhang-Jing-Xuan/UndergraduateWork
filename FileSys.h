@@ -85,6 +85,7 @@ public:
     size_t length;
     FileEntry(){
         fileName[0]=0;
+        length=0;
     }
 };
 
