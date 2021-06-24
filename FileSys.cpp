@@ -42,7 +42,7 @@ size_t InodeTable::add(Inode *i)
     fstream sysfile(DATAFILE, ios::in | ios::out | ios::binary);      // 读写二进制文件
     size_t address = getAvailable() * sizeof(Inode) + INODE_BIT_SIZE; //得到该节点的地址
     sysfile.seekp(address);                                           // 设置写文件指针的位置
-    sysfile.write(reinterpret_cast<const char *>(i), sizeof(Inode));  // 把从文件指针开始Inode大小的内容写到i
+    sysfile.write(reinterpret_cast<const char *>(i), sizeof(Inode));  // 把i的内容写到从文件指针开始Inode大小的位置
     sysfile.close();                                                  // 关闭文件
     return address;
 }
