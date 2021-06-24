@@ -315,8 +315,10 @@ void FileSys::run()
             openFile();
         else if (command == "read")
             readFile();
-        else if (command == "write")
+        else if (command == "overwrite")
             writeFile();
+        else if (command == "append")
+            appendFile();
         else if (command == "copy")
             copyFile();
         else if (command == "close")
@@ -462,6 +464,7 @@ void FileSys::copyFile()
         return;
     }
     copyWrite();
+    tmp="";
 }
 
 void FileSys::copyRead()
@@ -476,6 +479,46 @@ void FileSys::copyWrite()
     file.setInode(&rootDir);
     file.writeSelf(user.inodeAddress);            // 将本身i-node重新写入i-node表
     file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
+}
+
+void FileSys::appendFile()
+{
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
+    {
+        printf("请先打开该文件！\n");
+        return;
+    }
+    copyRead();
+    pln("write here. End with '$EOF'");
+    string res = "", line = "";
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //清除当前行
+    for (;;)
+    {
+        getline(cin, line);
+        auto pos = line.find("$EOF");
+        if (pos != string::npos)
+        {
+            line[pos] = '\n';
+            line[pos + 1] = '\0';
+            res += line.substr(0, pos + 2);
+            break;
+        }
+        line += '\n';
+        res += line;
+    }
+    res=res.substr(0,res.size()-1);
+    tmp=tmp.substr(0,tmp.size()-1);
+    // cout<<tmp<<" "<<res<<endl;
+    res=tmp+res;
+    // res=res.substr(0,res.size()-1);
+    // cout<<"res="<<res<<endl;
+    auto len = file.write(res, nowFileEntry->address); // 写到当前的i-node拥有的block里面
+    nowFileEntry->length = len;
+    file.setInode(&rootDir);
+    file.writeSelf(user.inodeAddress);            // 将本身i-node重新写入i-node表
+    file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
+    tmp="";
 }
 
 void FileSys::writeFile()
@@ -632,8 +675,10 @@ void FileSys::info()
 - delete    删除文件\n\
 - open      打开文件\n\
 - close     关闭文件\n\
+- copy      拷贝文件\n\
 - read      读文件\n\
-- write     写文件\n");
+- append     在文件末尾追加\n\
+- overwrite  覆盖原文件\n");
 }
 
 void FileSys::readnum(){

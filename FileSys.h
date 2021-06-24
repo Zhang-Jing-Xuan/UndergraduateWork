@@ -151,6 +151,7 @@ private:
     void closeFile();
     void readFile();
     void writeFile();
+    void appendFile();
     void boot();
     string pcToBinary(int n);
     bool login();
