@@ -1,11 +1,3 @@
-//
-//  FileSys.cpp
-//  SecondLevelFileSystem
-//
-//  Created by Eser on 31/08/2017.
-//  Copyright © 2017 Crysple. All rights reserved.
-//
-
 #include "FileSys.h"
 #include <bits/stdc++.h>
 
@@ -41,7 +33,7 @@ InodeTable::InodeTable()
 {
     ifstream sysfile(DATAFILE, ios::in | ios::binary);             // 读取二进制文件
     sysfile.seekg(0);                                              // 设置写文件指针的位置
-    sysfile.read(reinterpret_cast<char *>(entry), INODE_BIT_SIZE); // 读取从文件指针开始INODE_BIT_SIZE大小的内容到entry(强制转换成bool)
+    sysfile.read(reinterpret_cast<char *>(entry), INODE_BIT_SIZE); // 读取从文件指针开始INODE_BIT_SIZE大小的内容到entry(强制转换成char)
     sysfile.close();                                               // 关闭文件
 }
 
