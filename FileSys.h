@@ -1,11 +1,3 @@
-//
-//  FileSys.hpp
-//  SecondLevelFileSystem
-//
-//  Created by Eser on 31/08/2017.
-//  Copyright © 2017 Crysple. All rights reserved.
-//
-
 #ifndef FileSys_h
 #define FileSys_h
 
