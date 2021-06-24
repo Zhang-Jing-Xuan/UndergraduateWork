@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include <unordered_map>
 using namespace std;
 #define BLOCK_SIZE 1024 //块大小
 #define BLOCK_NUM 8192  //块数量
@@ -119,6 +120,7 @@ public:
     vector<string> split(const string& now);
     //从文件读取位图
     void readBitmap();
+    bool dir;
 private:
     Inode* inode;
     Bitmap bitmap;
@@ -138,8 +140,21 @@ private:
     Inode rootDir;
     string fileName;
     string tmp;
+
+    int current;
+    int total;
+    int h[100],e[2*100],ne[2*100],id,depth[100];
+    unordered_map <int,string> hash;
+    unordered_map <string,int> rhash;
+    void add(int a,int b);
+
     void pln(const string& s);
     void p(const string& s);
+
+    void mkdir();
+    void cddir(string dst);
+    void cdback();
+
     void printDir();
     void enterFileName();
     void createFile();

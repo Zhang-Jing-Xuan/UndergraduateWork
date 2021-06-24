@@ -170,7 +170,8 @@ vector<FileEntry> File::getDir()
         else
             field += c;
     }
-    for(auto i:res){
+    for (auto i : res)
+    {
         insert(i.fileName);
     }
     return res;
@@ -280,7 +281,13 @@ FileSys::FileSys()
     }
     else
         checkFile.close();
+    memset(h, -1, sizeof(h));
+    id = 0;
+    current = 0;
+    total = 0;
+    memset(depth, 0, sizeof(depth));
 }
+
 void FileSys::run()
 {
     printf("请输入regist以注册用户，输入login以登录账号，按Ctrl+C退出\n");
@@ -327,6 +334,21 @@ void FileSys::run()
             info();
         else if (command == "exit")
             break;
+        else if (command == "mkdir")
+            mkdir();
+        else if (command == "cd")
+        {
+            string dst;
+            cin >> dst;
+            if (dst == "..")
+            {
+                cdback();
+            }
+            else
+            {
+                cddir(dst);
+            }
+        }
         else
         {
             printf("命令出错!\n");
@@ -336,12 +358,24 @@ void FileSys::run()
 
 void FileSys::printDir()
 {
+    printf("Folder:\n");
+    for (int i = h[current]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if(depth[j]==depth[current]+1){
+            cout<<hash[j]<<"\t";
+        }
+    }
+    printf("\n");
     if (fileEntrys.size() == 0)
         return;
     cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
     for (FileEntry &i : fileEntrys)
     {
-        cout << left << setw(15) << i.fileName << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
+        if (depth[rhash[i.fileName]] == depth[current])
+        {
+            cout << left << setw(15) << i.fileName << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
+        }
     }
 }
 
@@ -379,6 +413,12 @@ void FileSys::createFile()
     file.setInode(&newinode);                     // 绑定inode到新建的节点
     file.writeSelf(address);                      //将本身i-node重新写入i-node表
     file.setInode(NULL);
+
+    total++;
+    file.dir = false;
+    depth[total] = depth[current];
+    hash[total] = fileName;
+    rhash[fileName] = total;
 }
 
 int FileSys::openFile()
@@ -425,9 +465,10 @@ void FileSys::deleteFile()
 
 void FileSys::closeFile()
 {
-    if(file.getInode()==NULL){
+    if (file.getInode() == NULL)
+    {
         pln("Close Failed");
-        return ;
+        return;
     }
     // pln("delete success");
     delete file.getInode();
@@ -464,7 +505,7 @@ void FileSys::copyFile()
         return;
     }
     copyWrite();
-    tmp="";
+    tmp = "";
 }
 
 void FileSys::copyRead()
@@ -507,10 +548,10 @@ void FileSys::appendFile()
         line += '\n';
         res += line;
     }
-    res=res.substr(0,res.size()-1);
-    tmp=tmp.substr(0,tmp.size()-1);
+    res = res.substr(0, res.size() - 1);
+    tmp = tmp.substr(0, tmp.size() - 1);
     // cout<<tmp<<" "<<res<<endl;
-    res=tmp+res;
+    res = tmp + res;
     // res=res.substr(0,res.size()-1);
     // cout<<"res="<<res<<endl;
     auto len = file.write(res, nowFileEntry->address); // 写到当前的i-node拥有的block里面
@@ -518,7 +559,7 @@ void FileSys::appendFile()
     file.setInode(&rootDir);
     file.writeSelf(user.inodeAddress);            // 将本身i-node重新写入i-node表
     file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
-    tmp="";
+    tmp = "";
 }
 
 void FileSys::writeFile()
@@ -681,7 +722,8 @@ void FileSys::info()
 - overwrite  覆盖原文件\n");
 }
 
-void FileSys::readnum(){
+void FileSys::readnum()
+{
     fstream sysfile(MAINFILE, ios::in | ios::out | ios::binary);
     size_t userNum = 0;
     sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
@@ -699,4 +741,67 @@ void FileSys::init()
     FileEntry temp;
     nowFileEntry = &temp;
     fileEntrys = file.getDir();
+}
+
+void FileSys::add(int a, int b)
+{
+    e[id] = b;
+    ne[id] = h[a];
+    h[a] = id++;
+}
+
+void FileSys::mkdir()
+{
+    string folderName;
+    cin >> folderName;
+    total++;
+    depth[total] = depth[current] + 1;
+    add(current, total);
+    add(total, current);
+    hash[total] = folderName;
+    rhash[folderName] = total;
+}
+
+void FileSys::cddir(string dst)
+{
+    for (int i = h[current]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if (hash[j] == dst)
+        {
+            current = rhash[dst];
+            string x = prefix.substr(0, prefix.size() - 2);
+            prefix = x + "/" + dst + "$ ";
+            return;
+        }
+    }
+    printf("目录不存在！\n");
+}
+
+void FileSys::cdback()
+{
+    if (current == 0)
+    {
+        printf("您已在根目录，无法回退！\n");
+        return;
+    }
+    for (int i = h[current]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        if (depth[j] < depth[current])
+        {
+            current = j;
+            for (int i = prefix.size(); i >= 0; i--)
+            {
+                if (prefix[i] == '/')
+                {
+                    prefix = prefix.substr(0, i);
+                    prefix = prefix + "$ ";
+                    return;
+                }
+            }
+        }
+    }
+    printf("回退失败！\n");
+    return;
 }
