@@ -83,6 +83,9 @@ public:
     int protectCode;
     //文件长度
     size_t length;
+    FileEntry(){
+        fileName[0]=0;
+    }
 };
 
 //用户
@@ -161,6 +164,7 @@ private:
     void adduser();
     void init();
     void info();
+    void readnum();
 };
 
 static const int N=100010,M=30;

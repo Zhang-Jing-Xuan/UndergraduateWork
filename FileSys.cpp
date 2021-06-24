@@ -611,7 +611,6 @@ void FileSys::adduser()
     sysfile.seekp(sizeof(size_t) + userNum * sizeof(User)); //将文件写入位置移到sizeof(size_t) + userNum * sizeof(User)
     sysfile.write(reinterpret_cast<const char *>(&newUser), sizeof(User));
     ++userNum;
-    user_num = userNum;
     sysfile.seekp(0); // 将文件写入位置移到开头
     sysfile.write(reinterpret_cast<const char *>(&userNum), sizeof(size_t));
     sysfile.close();
@@ -619,6 +618,7 @@ void FileSys::adduser()
 
 void FileSys::info()
 {
+    readnum();
     printf("----------磁盘容量：1M----------\n");
     printf("----------用户数量：%d------------\n", user_num);
     printf("            命令\n");
@@ -633,6 +633,13 @@ void FileSys::info()
 - write     写文件\n");
 }
 
+void FileSys::readnum(){
+    fstream sysfile(MAINFILE, ios::in | ios::out | ios::binary);
+    size_t userNum = 0;
+    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
+    user_num = userNum;
+}
+
 void FileSys::init()
 {
     prefix += "~ " + string(user.username) + "$ "; //~zjx$
@@ -641,5 +648,7 @@ void FileSys::init()
     sysfile.read(reinterpret_cast<char *>(&rootDir), sizeof(Inode));
     sysfile.close();
     file.setInode(&rootDir);
+    FileEntry temp;
+    nowFileEntry = &temp;
     fileEntrys = file.getDir();
 }
