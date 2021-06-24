@@ -1,18 +1,3 @@
-# SecondLevelFileSystem
-A second level File System ----my "operating system" project/homework
-
-
-This is the big job of my operating system course. It is a simple second level file system imitating that in linux.
-It use two files(imitating the disk) to store the infomation -- the "main.dat" file and the "data.dat" file.
-
-- "main.dat" stores infomation about users and the number of them
-- "data.dat" stores i-nodes, i-node table, bitmap and blocks which directory is also stored in some blocks pertaining to a i-node
-
-special things:
-- use "adduser" command to add a user at first and use "exit" command to exit the system
-- must do the "open" command every time you want to have a operation on a file.
-
-Below is the lab report
 
 
 # 操作系统实验报告
