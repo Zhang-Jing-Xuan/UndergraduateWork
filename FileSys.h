@@ -120,6 +120,7 @@ public:
     vector<string> split(const string& now);
     //从文件读取位图
     void readBitmap();
+    //该文件是普通文件还是文件夹
     bool dir;
 private:
     Inode* inode;

@@ -1,35 +1,36 @@
 #include "FileSys.h"
-#include <bits/stdc++.h>
+//g++ -std=c++11 -o file main.cpp FileSys.cpp
+// #include <bits/stdc++.h>
 
-void insert(const char str[])
+void insert(const char str[]) // 字典树插入
 {
-    int p = 0;
-    for (int i = 0; str[i]; i++)
+    int p = 0;                   // 字典树的根节点编号为0
+    for (int i = 0; str[i]; i++) // 遍历要插入的字符串的每一位
     {
-        int u = str[i] - 'a';
-        if (!son[p][u])
-            son[p][u] = ++idx;
-        p = son[p][u];
+        int u = str[i] - 'a';  // 默认文件名都是小写
+        if (!son[p][u])        // 如果不存在u节点
+            son[p][u] = ++idx; // 就给u节点分配一个idx
+        p = son[p][u];         // p走到刚才创建的节点
     }
-    cnt[p]++;
+    cnt[p]++; // 维护字典树中每个字符串出现的个数
 }
 
-int query(const char str[])
+int query(const char str[]) // 字典树查询
 {
-    int p = 0;
-    for (int i = 0; str[i]; i++)
+    int p = 0;                   // 字典树的根节点编号为0
+    for (int i = 0; str[i]; i++) // 遍历要插入的字符串的每一位
     {
-        int u = str[i] - 'a';
-        if (!son[p][u])
-            return 0;
-        p = son[p][u];
+        int u = str[i] - 'a'; // 默认文件名都是小写
+        if (!son[p][u])       // 如果不存在u节点
+            return 0;         // 直接返回不存在
+        p = son[p][u];        // 否则p往下走一步
     }
-    return cnt[p];
+    return cnt[p]; // 返回字典树中要查询的那个字符串出现的个数
 }
 
 // 200个inode节点，每个inode 10个block
 /********** InodeTable *********/
-InodeTable::InodeTable()
+InodeTable::InodeTable() // InodeTable类构造函数
 {
     ifstream sysfile(DATAFILE, ios::in | ios::binary);             // 读取二进制文件
     sysfile.seekg(0);                                              // 设置写文件指针的位置
@@ -37,17 +38,17 @@ InodeTable::InodeTable()
     sysfile.close();                                               // 关闭文件
 }
 
-size_t InodeTable::add(Inode *i)
+size_t InodeTable::add(Inode *i) // 添加一个节点，返回其地址
 {
     fstream sysfile(DATAFILE, ios::in | ios::out | ios::binary);      // 读写二进制文件
-    size_t address = getAvailable() * sizeof(Inode) + INODE_BIT_SIZE; //得到该节点的地址
+    size_t address = getAvailable() * sizeof(Inode) + INODE_BIT_SIZE; // 得到该节点的地址
     sysfile.seekp(address);                                           // 设置写文件指针的位置
-    sysfile.write(reinterpret_cast<const char *>(i), sizeof(Inode));  // 把i的内容写到从文件指针开始Inode大小的位置
+    sysfile.write(reinterpret_cast<const char *>(i), sizeof(Inode));  // 把i的内容写到从文件指针开始的位置，写入内容的大小为sizeof(Inode)
     sysfile.close();                                                  // 关闭文件
-    return address;
+    return address;                                                   //返回可用地址
 }
 
-Inode *InodeTable::getInode(size_t address)
+Inode *InodeTable::getInode(size_t address) // 使用inode地址获取一个inode指针，废弃需delete
 {
     ifstream sysfile(DATAFILE, ios::in | ios::binary);          // 读取二进制文件
     auto res = new Inode();                                     //创建一个Inode
@@ -57,83 +58,83 @@ Inode *InodeTable::getInode(size_t address)
     return res;
 }
 
-size_t InodeTable::getAvailable()
+size_t InodeTable::getAvailable() //得到一个可以用的inode索引
 {
-    for (size_t i = 0; i < 200; ++i) //200个索引表项
+    for (size_t i = 0; i < 200; ++i) // 200个索引表项
     {
-        if (entry[i] == false)
+        if (entry[i] == false) // 如果inode表项空闲
         {
-            entry[i] = true;
-            write(); // 将该表写入磁盘
-            return i;
+            entry[i] = true; //置为不空闲
+            write();         // 将该表写入磁盘
+            return i;        // 空闲的索引
         }
     }
-    return -1;
+    return -1; // 否则inode表不空闲，返回-1
 }
 
-void InodeTable::release(size_t add, Bitmap *bitmap)
+void InodeTable::release(size_t add, Bitmap *bitmap) // 输入地址，释放该inode的所有块以及该inode本身
 {
     auto cur = getInode(add);                  //使用inode地址获取一个inode指针
     for (size_t i = 0; i < cur->blockNum; ++i) //从0到该iNode磁盘块的个数
     {
-        bitmap->release(cur->blockAddress[i]); //释放位图中的iNode的磁盘块的地址
+        bitmap->release(cur->blockAddress[i]); // 释放位图中的iNode的磁盘块的地址
     }
-    size_t index = (add - INODE_BIT_SIZE) / sizeof(Inode);
-    if (index < 200)
-        entry[index] = false;
-    write();
-    delete cur;
+    size_t index = (add - INODE_BIT_SIZE) / sizeof(Inode); // 得到该地址的索引
+    if (index < 200)                                       // 200是最大值
+        entry[index] = false;                              // 置index索引的inode为空闲
+    write();                                               // 将entry表中的内容写到data.dat二进制文件中
+    delete cur;                                            // 释放inode本身
 }
 
-void InodeTable::write()
+void InodeTable::write() // 将表写入到磁盘
 {
-    fstream sysfile(DATAFILE, ios::out | ios::in | ios::binary);
-    sysfile.seekp(0);
-    sysfile.write(reinterpret_cast<const char *>(entry), INODE_BIT_SIZE);
-    sysfile.close();
+    fstream sysfile(DATAFILE, ios::out | ios::in | ios::binary);          // 读写二进制文件
+    sysfile.seekp(0);                                                     //调整文件指针位置
+    sysfile.write(reinterpret_cast<const char *>(entry), INODE_BIT_SIZE); //将entry表中的内容写到data.dat二进制文件中
+    sysfile.close();                                                      //关闭文件
 }
 
 /********** Bit map *********/
 void Bitmap::init() //初始化位图全为空闲
 {
-    for (size_t i = 0; i < BLOCK_NUM; ++i)
-        bitmap[i] = false;
+    for (size_t i = 0; i < BLOCK_NUM; ++i) //遍历所有块
+        bitmap[i] = false;                 //将其置为空闲状态
 }
 
-void Bitmap::write()
+void Bitmap::write() // 将位图写到磁盘
 {
-    fstream sysfile(DATAFILE, ios::out | ios::in | ios::binary);
-    sysfile.seekp(INODE_TABLE_SIZE);
-    sysfile.write(reinterpret_cast<const char *>(this), BITMAP_SIZE);
-    sysfile.close();
+    fstream sysfile(DATAFILE, ios::out | ios::in | ios::binary);      // 读写二进制文件
+    sysfile.seekp(INODE_TABLE_SIZE);                                  // 调整文件指针
+    sysfile.write(reinterpret_cast<const char *>(this), BITMAP_SIZE); // 将Bitmap的内容写到从文件指针开始的位置，写入内容的大小为BITMAP_SIZE
+    sysfile.close();                                                  // 关闭文件
 }
-size_t Bitmap::getNext()
+size_t Bitmap::getNext() // 得到下一个可用的块的地址
 {
-    for (size_t i = 0; i < BLOCK_SIZE; ++i)
+    for (size_t i = 0; i < BLOCK_SIZE; ++i) //遍历所有块
     {
-        if (!bitmap[i])
+        if (!bitmap[i]) // 如果该位示图索引为i的地方不空闲
         {
-            bitmap[i] = true;
-            write(); // 将位图写到磁盘
-            return i * BLOCK_SIZE + INODE_TABLE_SIZE + BITMAP_SIZE;
+            bitmap[i] = true;                                       //置为被占用
+            write();                                                // 将位图写到磁盘
+            return i * BLOCK_SIZE + INODE_TABLE_SIZE + BITMAP_SIZE; //返回可以被利用的块地址
         }
     }
-    return -1;
+    return -1; // 不存在可用的地址
 }
 
-void Bitmap::release(size_t add)
+void Bitmap::release(size_t add) //释放该块
 {
-    size_t index = (add - INODE_TABLE_SIZE - BITMAP_SIZE) / BLOCK_SIZE;
-    bitmap[index] = false;
-    write();
+    size_t index = (add - INODE_TABLE_SIZE - BITMAP_SIZE) / BLOCK_SIZE; //先得到该块的索引
+    bitmap[index] = false;                                              //将该块的地址置为空闲
+    write();                                                            // 将位图写到磁盘
 }
 
 /********** User *********/
-void User::setUsername(string name)
+void User::setUsername(string name) //设置用户名
 {
-    size_t len = name.size() < 30 ? name.size() : 29;
-    name.copy(username, len);
-    username[len] = '\0';
+    size_t len = name.size() < 30 ? name.size() : 29; // 限制用户名的大小最大30
+    name.copy(username, len);                         // 将name拷贝到username中
+    username[len] = '\0';                             // 标志字符串结束
 }
 
 /********** File *********/
@@ -281,11 +282,11 @@ FileSys::FileSys()
     }
     else
         checkFile.close();
-    memset(h, -1, sizeof(h));
-    id = 0;
-    current = 0;
-    total = 0;
-    memset(depth, 0, sizeof(depth));
+    memset(h, -1, sizeof(h));        //初始化邻接表表头为空
+    id = 0;                          // 文件夹的个数
+    current = 0;                     // 当前处于哪一级目录
+    total = 0;                       // 文件和文件夹的总数
+    memset(depth, 0, sizeof(depth)); //初始化深度为空
 }
 
 void FileSys::run()
@@ -362,8 +363,9 @@ void FileSys::printDir()
     for (int i = h[current]; ~i; i = ne[i])
     {
         int j = e[i];
-        if(depth[j]==depth[current]+1){
-            cout<<hash[j]<<"\t";
+        if (depth[j] == depth[current] + 1)
+        {
+            cout << hash[j] << "\t";
         }
     }
     printf("\n");
@@ -414,29 +416,29 @@ void FileSys::createFile()
     file.writeSelf(address);                      //将本身i-node重新写入i-node表
     file.setInode(NULL);
 
-    total++;
-    file.dir = false;
-    depth[total] = depth[current];
-    hash[total] = fileName;
+    total++; // 文件+文件夹的数量+1
+    file.dir = false; // 不是文件夹
+    depth[total] = depth[current]; // 该文件的深度和该文件夹的深度相同
+    hash[total] = fileName; // 更新哈希表和反哈希表
     rhash[fileName] = total;
 }
 
-int FileSys::openFile()
+int FileSys::openFile() // 打开文件
 {
-    enterFileName();
-    if (query(fileName.c_str()) == 0)
+    enterFileName(); // 用户输入文件名
+    if (query(fileName.c_str()) == 0) // 到字典树中查找，判断该文件名是否已经存在，如果不存在
     {
-        pln("No Such File");
+        pln("No Such File"); // 输出不存在此文件并换行
         return -1;
     }
-    for (size_t i = 0; i < fileEntrys.size(); ++i)
+    for (size_t i = 0; i < fileEntrys.size(); ++i) // 遍历所有文件
     {
         if (string(fileEntrys[i].fileName) == fileName) //找到文件
         {
-            nowFileEntry = &fileEntrys[i];
+            nowFileEntry = &fileEntrys[i]; // 得到fileEntry[i]的地址
             // 绑定inode到找到的文件
             file.setInode(inodeTable.getInode(fileEntrys[i].address));
-            pln("Open Successfully");
+            pln("Open Successfully"); //输出打开成功并换行
             return 1;
         }
     }
@@ -492,37 +494,37 @@ void FileSys::p(const string &s) { cout << s; }
 
 void FileSys::copyFile()
 {
-    int success = 1;
-    success = openFile();
-    if (success == -1)
+    int success = 1; // 标志源文件是否打开成功
+    success = openFile(); 
+    if (success == -1) // 如果打开失败
     {
         return;
     }
-    copyRead();
-    success = openFile();
-    if (success == -1)
+    copyRead(); // 读取源文件的内容
+    success = openFile(); // 标志目标文件是否打开成功
+    if (success == -1) // 如果打开失败
     {
         return;
     }
-    copyWrite();
-    tmp = "";
+    copyWrite(); // 写入目标文件
+    tmp = ""; // 清空缓存
 }
 
 void FileSys::copyRead()
 {
-    tmp = file.readAll();
+    tmp = file.readAll(); // 读取源文件的内容
 }
 
-void FileSys::copyWrite()
+void FileSys::copyWrite() // 写入目标文件
 {
     auto len = file.write(tmp, nowFileEntry->address); // 写到当前的i-node拥有的block里面
-    nowFileEntry->length = len;
-    file.setInode(&rootDir);
+    nowFileEntry->length = len; // 更新文件长度
+    file.setInode(&rootDir); // 绑定到根节点
     file.writeSelf(user.inodeAddress);            // 将本身i-node重新写入i-node表
     file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
 }
 
-void FileSys::appendFile()
+void FileSys::appendFile() 
 {
     if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
     {
@@ -596,29 +598,29 @@ void FileSys::writeFile()
 
 void FileSys::boot()
 {
-    ofstream sysfile(MAINFILE, ios::binary);
-    size_t i = 0;
-    sysfile.write(reinterpret_cast<const char *>(&i), sizeof(size_t));
-    sysfile.close();
+    ofstream sysfile(MAINFILE, ios::binary);                           //写入二进制文件man.dat
+    size_t i = 0;                                                      // 文件指针置为文件开头
+    sysfile.write(reinterpret_cast<const char *>(&i), sizeof(size_t)); //将从文件开头开始size_t大小的内容写入sysfile
+    sysfile.close();                                                   // 关闭二进制文件
 
-    sysfile.open(DATAFILE, ios::binary);
-    bool tempTable[200] = {0};
-    sysfile.seekp(0);
-    sysfile.write(reinterpret_cast<const char *>(tempTable), INODE_BIT_SIZE);
-    Bitmap tempBitmap;
-    tempBitmap.init();
-    sysfile.seekp(INODE_TABLE_SIZE);
-    sysfile.write(reinterpret_cast<const char *>(&tempBitmap), BITMAP_SIZE);
-    sysfile.close();
+    sysfile.open(DATAFILE, ios::binary); //打开二进制文件data.dat
+    bool tempTable[200] = {0}; // 全部为零的bool数组
+    sysfile.seekp(0); // 文件指针指向开头
+    sysfile.write(reinterpret_cast<const char *>(tempTable), INODE_BIT_SIZE); //初始化二进制文件data.dat
+    Bitmap tempBitmap; // 实例化临时的位示图
+    tempBitmap.init(); // 初始化临时的位示图
+    sysfile.seekp(INODE_TABLE_SIZE); // 调整文件指针
+    sysfile.write(reinterpret_cast<const char *>(&tempBitmap), BITMAP_SIZE); //写到临时的位示图中
+    sysfile.close(); // 关闭二进制文件data.dat
 
-    file.readBitmap();
-    inodeTable = InodeTable();
+    file.readBitmap(); //读取位示图
+    inodeTable = InodeTable(); //实例化索引表
 }
 
 string FileSys::pcToBinary(int n)
 {
     string res = "";
-    auto convert = [&res](int i) //lambda表达式
+    auto convert = [&res](int i) // lambda表达式
     {
         switch (i)
         {
@@ -709,17 +711,21 @@ void FileSys::info()
     printf("----------磁盘容量：1M----------\n");
     printf("----------用户数量：%d------------\n", user_num);
     printf("            命令\n");
-    printf("- info      列出文件系统信息\n\
+    printf("\
+- info      列出文件系统信息\n\
 - login     用户登录\n\
-- dir       列文件目录\n\
+- dir       列出文件夹和文件目录\n\
 - create    创建文件\n\
 - delete    删除文件\n\
 - open      打开文件\n\
 - close     关闭文件\n\
 - copy      拷贝文件\n\
 - read      读文件\n\
-- append     在文件末尾追加\n\
-- overwrite  覆盖原文件\n");
+- append    在文件末尾追加\n\
+- overwrite 覆盖原文件\n\
+- mkdir     新建目录\n\
+- cd        进入目录\n\
+");
 }
 
 void FileSys::readnum()
