@@ -119,6 +119,7 @@ void FileSys::enterFileName()
 void FileSys::createFile()
 {
     enterFileName(); //FileSys的filename
+    // fileName=to_string(current)+fileName;
     for(int i=0;i<N;i++){
         cnt[i]=0;
         for(int j=0;j<M;j++){
