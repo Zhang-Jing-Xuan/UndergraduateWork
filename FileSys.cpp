@@ -39,6 +39,7 @@ void FileSys::run()
     init();
     for (;;)
     {
+        // cout<<"current = "<<current<<endl;
         p(prefix);
         cin >> command;
         transform(command.begin(), command.end(), command.begin(), ::tolower);
@@ -129,9 +130,10 @@ void FileSys::createFile()
         if (i.fileName[strlen(i.fileName)-1]-'0' == current)
         {
             insert(i.fileName);
+            // cout<<"已插入到字典树"<<i.fileName<<" "<<query(i.fileName)<<endl;
         }
     }
-    if (query(fileName.c_str()) == 1)
+    if (query(fileName.c_str()) >= 1)
     {
         printf("已存在同名文件！\n");
         return;
