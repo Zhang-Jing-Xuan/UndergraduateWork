@@ -1,8 +1,5 @@
 #include "FileSys.h"
 
-//g++ -std=c++11 -o file main.cpp FileSys.cpp
-// #include <bits/stdc++.h>
-
 FileSys::FileSys()
 {
     prefix = "Administrator:";

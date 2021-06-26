@@ -6,5 +6,5 @@ int main() {
         FileSys filesys; // 实例化FileSys类
         filesys.run(); // 运行文件系统
     }
-    
+    return 0;
 }
