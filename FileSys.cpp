@@ -119,12 +119,25 @@ void FileSys::enterFileName()
 void FileSys::createFile()
 {
     enterFileName(); //FileSys的filename
+    for(int i=0;i<N;i++){
+        cnt[i]=0;
+        for(int j=0;j<M;j++){
+            son[i][j]=0;
+        }
+    }
+    idx=0;
+    for (FileEntry &i : fileEntrys)
+    {
+        if (depth[rhash[i.fileName]] == depth[current])
+        {
+            insert(i.fileName);
+        }
+    }
     if (query(fileName.c_str()) == 1)
     {
         printf("已存在同名文件！\n");
         return;
     }
-    insert(fileName.c_str());
     pln("Protect Code(three-bit integer): ");
     int pc; //保护码
     cin >> pc;

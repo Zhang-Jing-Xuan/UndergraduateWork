@@ -32,10 +32,6 @@ vector<FileEntry> File::getDir()
         else
             field += c;
     }
-    for (auto i : res)
-    {
-        insert(i.fileName);
-    }
     return res;
 }
 
