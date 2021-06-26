@@ -103,9 +103,12 @@ void FileSys::printDir()
     cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
     for (FileEntry &i : fileEntrys)
     {
-        if (depth[rhash[i.fileName]] == depth[current])
+        if (i.fileName[strlen(i.fileName)-1]-'0' == current)
         {
-            cout << left << setw(15) << i.fileName << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
+            char a[30];
+            strcpy(a,i.fileName);
+            a[strlen(i.fileName)-1]='\0';
+            cout << left << setw(15) << a << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
         }
     }
 }
@@ -119,17 +122,11 @@ void FileSys::enterFileName()
 void FileSys::createFile()
 {
     enterFileName(); //FileSys的filename
-    // fileName=to_string(current)+fileName;
-    for(int i=0;i<N;i++){
-        cnt[i]=0;
-        for(int j=0;j<M;j++){
-            son[i][j]=0;
-        }
-    }
-    idx=0;
+    fileName=fileName+to_string(current);
+    dicInit();
     for (FileEntry &i : fileEntrys)
     {
-        if (depth[rhash[i.fileName]] == depth[current])
+        if (i.fileName[strlen(i.fileName)-1]-'0' == current)
         {
             insert(i.fileName);
         }
@@ -169,11 +166,12 @@ void FileSys::createFile()
 int FileSys::openFile() // 打开文件
 {
     enterFileName(); // 用户输入文件名
-    if (query(fileName.c_str()) == 0) // 到字典树中查找，判断该文件名是否已经存在，如果不存在
-    {
-        pln("No Such File"); // 输出不存在此文件并换行
-        return -1;
-    }
+    fileName=fileName+to_string(current);
+    // if (query(fileName.c_str()) == 0) // 到字典树中查找，判断该文件名是否已经存在，如果不存在
+    // {
+    //     pln("No Such File"); // 输出不存在此文件并换行
+    //     return -1;
+    // }
     for (size_t i = 0; i < fileEntrys.size(); ++i) // 遍历所有文件
     {
         if (string(fileEntrys[i].fileName) == fileName) //找到文件
@@ -185,14 +183,15 @@ int FileSys::openFile() // 打开文件
             return 1;
         }
     }
-    return -1;
-    // pln("No Such File");
     // return -1;
+    pln("No Such File");
+    return -1;
 }
 
 void FileSys::deleteFile()
 {
     enterFileName();
+    fileName=fileName+to_string(current);
     for (auto i = fileEntrys.begin(); i < fileEntrys.end(); ++i)
     {
         if (string(i->fileName) == fileName)

@@ -25,3 +25,13 @@ int query(const char str[]) // 字典树查询
     }
     return cnt[p]; // 返回字典树中要查询的那个字符串出现的个数
 }
+
+void dicInit(){
+    for(int i=0;i<N;i++){
+        cnt[i]=0;
+        for(int j=0;j<M;j++){
+            son[i][j]=0;
+        }
+    }
+    idx=0;
+}

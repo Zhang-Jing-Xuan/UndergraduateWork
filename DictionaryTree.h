@@ -6,4 +6,5 @@ static int son[N][M],idx,cnt[N];
 
 void insert(const char str[]); // 字典树插入
 int query(const char str[]);
+void dicInit();
 #endif
