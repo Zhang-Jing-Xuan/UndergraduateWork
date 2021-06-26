@@ -419,12 +419,29 @@ void FileSys::adduser()
     User newUser;
     p("Username:");
     cin >> newUser.username;
+    
+    unordered_map<string,bool> judgeUser;
+    ifstream _sysfile(MAINFILE, ios::in | ios::binary);
+    size_t userNum = 0;
+    _sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
+    for (size_t i = 0; i < userNum; ++i)
+    {
+        _sysfile.seekg(sizeof(size_t) + i * sizeof(User));
+        _sysfile.read(reinterpret_cast<char *>(&user), sizeof(User));
+        judgeUser[user.username]=true;
+    }
+    _sysfile.close();
+    if(judgeUser[newUser.username]){
+        cout<<"用户名已存在，请重新注册！"<<endl;
+        return ;
+    }
+    
     p("Password:");
     cin >> newUser.password;
     Inode root(0);
     newUser.inodeAddress = inodeTable.add(&root);
     fstream sysfile(MAINFILE, ios::in | ios::out | ios::binary);
-    size_t userNum = 0;
+    userNum = 0;
     sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
     sysfile.seekp(sizeof(size_t) + userNum * sizeof(User)); //将文件写入位置移到sizeof(size_t) + userNum * sizeof(User)
     sysfile.write(reinterpret_cast<const char *>(&newUser), sizeof(User));
