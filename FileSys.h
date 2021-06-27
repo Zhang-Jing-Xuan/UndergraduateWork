@@ -41,7 +41,8 @@ private:
     void cdback();
     void backup();
     void resume();
-
+    void writeBack();
+    
     void printDir();
     void enterFileName();
     void createFile();

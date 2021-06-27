@@ -580,8 +580,8 @@ void FileSys::cdback()
     return;
 }
 
-void FileSys::backup()
-{ //先找到再备份
+void FileSys::writeBack()
+{
     ofstream file("dir.txt", ios::app);
     file << user.username << endl;
     int n = 100;
@@ -606,6 +606,7 @@ void FileSys::backup()
     }
     file << endl;
     file << id << endl;
+    file << total << endl;
     for (auto i : hash)
     {
         file << i.first << " " << i.second << " ";
@@ -617,6 +618,68 @@ void FileSys::backup()
     }
     file << endl;
     file.close();
+    return ;
+}
+
+void FileSys::backup() //先找到再备份
+{ 
+    ifstream inFile("dir.txt", ios::in);
+    if(!inFile.is_open())
+    {
+        writeBack();
+    }else{
+        string line;
+        while (getline(inFile, line))
+        {
+            if (line == user.username)
+            {
+                //写入
+                ofstream file("dir.txt", ios::in|ios::out);
+                file.seekp(inFile.tellg(),ios::beg);
+                inFile.close();
+                cout<<file.tellp()<<endl;
+                // file << user.username << endl;
+                int n = 100;
+                for (int i = 0; i < n; i++)
+                {
+                    file << h[i] << " ";
+                }
+                file << endl;
+                for (int i = 0; i < 2 * n; i++)
+                {
+                    file << e[i] << " ";
+                }
+                file << endl;
+                for (int i = 0; i < 2 * n; i++)
+                {
+                    file << ne[i] << " ";
+                }
+                file << endl;
+                for (int i = 0; i < n; i++)
+                {
+                    file << depth[i] << " ";
+                }
+                file << endl;
+                file << id << endl;
+                file << total << endl;
+                for (auto i : hash)
+                {
+                    file << i.first << " " << i.second << " ";
+                }
+                file << endl;
+                for (auto i : rhash)
+                {
+                    file << i.first << " " << i.second << " ";
+                }
+                file << endl;
+                file.close();
+                
+                return ;
+            }
+        }
+        writeBack();
+    }
+    inFile.close();
 }
 
 void FileSys::resume()
@@ -661,6 +724,10 @@ void FileSys::resume()
             line = "";
             getline(file, line); // id
             id = stoi(line);
+
+            line = "";
+            getline(file, line); // total
+            total = stoi(line);
 
             line = "";
             getline(file, line); // hash
