@@ -95,27 +95,32 @@ void FileSys::run()
 
 void FileSys::printDir()
 {
-    printf("Folder:\n");
+    int x=0;
     for (int i = h[current]; ~i; i = ne[i])
     {
         int j = e[i];
         if (depth[j] == depth[current] + 1)
         {
+            if(x==0)printf("Folder:\n");
             cout << hash[j] << "\t";
+            x++;
         }
     }
-    printf("\n");
+    if(x!=0)printf("\n");
+    x=0;
     if (fileEntrys.size() == 0)
         return;
-    cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
+    
     for (FileEntry &i : fileEntrys)
     {
         if (i.fileName[strlen(i.fileName) - 1] - '0' == current)
         {
+            if(x==0)cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
             char a[30];
             strcpy(a, i.fileName);
             a[strlen(i.fileName) - 1] = '\0';
             cout << left << setw(15) << a << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
+            x++;
         }
     }
 }
