@@ -618,26 +618,28 @@ void FileSys::writeBack()
     }
     file << endl;
     file.close();
-    return ;
+    return;
 }
 
 void FileSys::backup() //先找到再备份
-{ 
+{
     ifstream inFile("dir.txt", ios::in);
-    if(!inFile.is_open())
+    if (!inFile.is_open())
     {
         writeBack();
-    }else{
+    }
+    else
+    {
         string line;
         while (getline(inFile, line))
         {
             if (line == user.username)
             {
                 //写入
-                ofstream file("dir.txt", ios::in|ios::out);
-                file.seekp(inFile.tellg(),ios::beg);
+                ofstream file("dir.txt", ios::in | ios::out);
+                file.seekp(inFile.tellg(), ios::beg);
                 inFile.close();
-                cout<<file.tellp()<<endl;
+                cout << file.tellp() << endl;
                 // file << user.username << endl;
                 int n = 100;
                 for (int i = 0; i < n; i++)
@@ -673,8 +675,8 @@ void FileSys::backup() //先找到再备份
                 }
                 file << endl;
                 file.close();
-                
-                return ;
+
+                return;
             }
         }
         writeBack();
