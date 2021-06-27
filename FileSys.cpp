@@ -644,7 +644,7 @@ void FileSys::backup() //先找到再备份
                 ofstream file("dir.txt", ios::in | ios::out);
                 file.seekp(inFile.tellg(), ios::beg);
                 inFile.close();
-                cout << file.tellp() << endl;
+                // cout << file.tellp() << endl;
                 // file << user.username << endl;
                 int n = 100;
                 for (int i = 0; i < n; i++)
