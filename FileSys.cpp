@@ -110,11 +110,11 @@ void FileSys::printDir()
     cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
     for (FileEntry &i : fileEntrys)
     {
-        if (i.fileName[strlen(i.fileName)-1]-'0' == current)
+        if (i.fileName[strlen(i.fileName) - 1] - '0' == current)
         {
             char a[30];
-            strcpy(a,i.fileName);
-            a[strlen(i.fileName)-1]='\0';
+            strcpy(a, i.fileName);
+            a[strlen(i.fileName) - 1] = '\0';
             cout << left << setw(15) << a << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
         }
     }
@@ -129,11 +129,11 @@ void FileSys::enterFileName()
 void FileSys::createFile()
 {
     enterFileName(); //FileSys的filename
-    fileName=fileName+to_string(current);
+    fileName = fileName + to_string(current);
     dicInit();
     for (FileEntry &i : fileEntrys)
     {
-        if (i.fileName[strlen(i.fileName)-1]-'0' == current)
+        if (i.fileName[strlen(i.fileName) - 1] - '0' == current)
         {
             insert(i.fileName);
             // cout<<"已插入到字典树"<<i.fileName<<" "<<query(i.fileName)<<endl;
@@ -164,17 +164,17 @@ void FileSys::createFile()
     file.writeSelf(address);                      //将本身i-node重新写入i-node表
     file.setInode(NULL);
 
-    total++; // 文件+文件夹的数量+1
-    file.dir = false; // 不是文件夹
+    total++;                       // 文件+文件夹的数量+1
+    file.dir = false;              // 不是文件夹
     depth[total] = depth[current]; // 该文件的深度和该文件夹的深度相同
-    hash[total] = fileName; // 更新哈希表和反哈希表
+    hash[total] = fileName;        // 更新哈希表和反哈希表
     rhash[fileName] = total;
 }
 
 int FileSys::openFile() // 打开文件
 {
     enterFileName(); // 用户输入文件名
-    fileName=fileName+to_string(current);
+    fileName = fileName + to_string(current);
     // if (query(fileName.c_str()) == 0) // 到字典树中查找，判断该文件名是否已经存在，如果不存在
     // {
     //     pln("No Such File"); // 输出不存在此文件并换行
@@ -199,7 +199,7 @@ int FileSys::openFile() // 打开文件
 void FileSys::deleteFile()
 {
     enterFileName();
-    fileName=fileName+to_string(current);
+    fileName = fileName + to_string(current);
     for (auto i = fileEntrys.begin(); i < fileEntrys.end(); ++i)
     {
         if (string(i->fileName) == fileName)
@@ -245,19 +245,19 @@ void FileSys::p(const string &s) { cout << s; }
 void FileSys::copyFile()
 {
     int success = 1; // 标志源文件是否打开成功
-    success = openFile(); 
+    success = openFile();
     if (success == -1) // 如果打开失败
     {
         return;
     }
-    copyRead(); // 读取源文件的内容
+    copyRead();           // 读取源文件的内容
     success = openFile(); // 标志目标文件是否打开成功
-    if (success == -1) // 如果打开失败
+    if (success == -1)    // 如果打开失败
     {
         return;
     }
     copyWrite(); // 写入目标文件
-    tmp = ""; // 清空缓存
+    tmp = "";    // 清空缓存
 }
 
 void FileSys::copyRead()
@@ -268,13 +268,13 @@ void FileSys::copyRead()
 void FileSys::copyWrite() // 写入目标文件
 {
     auto len = file.write(tmp, nowFileEntry->address); // 写到当前的i-node拥有的block里面
-    nowFileEntry->length = len; // 更新文件长度
-    file.setInode(&rootDir); // 绑定到根节点
-    file.writeSelf(user.inodeAddress);            // 将本身i-node重新写入i-node表
-    file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
+    nowFileEntry->length = len;                        // 更新文件长度
+    file.setInode(&rootDir);                           // 绑定到根节点
+    file.writeSelf(user.inodeAddress);                 // 将本身i-node重新写入i-node表
+    file.writeDir(fileEntrys, user.inodeAddress);      //写inode为目录
 }
 
-void FileSys::appendFile() 
+void FileSys::appendFile()
 {
     if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
     {
@@ -353,17 +353,17 @@ void FileSys::boot()
     sysfile.write(reinterpret_cast<const char *>(&i), sizeof(size_t)); //将从文件开头开始size_t大小的内容写入sysfile
     sysfile.close();                                                   // 关闭二进制文件
 
-    sysfile.open(DATAFILE, ios::binary); //打开二进制文件data.dat
-    bool tempTable[200] = {0}; // 全部为零的bool数组
-    sysfile.seekp(0); // 文件指针指向开头
+    sysfile.open(DATAFILE, ios::binary);                                      //打开二进制文件data.dat
+    bool tempTable[200] = {0};                                                // 全部为零的bool数组
+    sysfile.seekp(0);                                                         // 文件指针指向开头
     sysfile.write(reinterpret_cast<const char *>(tempTable), INODE_BIT_SIZE); //初始化二进制文件data.dat
-    Bitmap tempBitmap; // 实例化临时的位示图
-    tempBitmap.init(); // 初始化临时的位示图
-    sysfile.seekp(INODE_TABLE_SIZE); // 调整文件指针
-    sysfile.write(reinterpret_cast<const char *>(&tempBitmap), BITMAP_SIZE); //写到临时的位示图中
-    sysfile.close(); // 关闭二进制文件data.dat
+    Bitmap tempBitmap;                                                        // 实例化临时的位示图
+    tempBitmap.init();                                                        // 初始化临时的位示图
+    sysfile.seekp(INODE_TABLE_SIZE);                                          // 调整文件指针
+    sysfile.write(reinterpret_cast<const char *>(&tempBitmap), BITMAP_SIZE);  //写到临时的位示图中
+    sysfile.close();                                                          // 关闭二进制文件data.dat
 
-    file.readBitmap(); //读取位示图
+    file.readBitmap();         //读取位示图
     inodeTable = InodeTable(); //实例化索引表
 }
 
@@ -440,8 +440,8 @@ void FileSys::adduser()
     User newUser;
     p("Username:");
     cin >> newUser.username;
-    
-    unordered_map<string,bool> judgeUser;
+
+    unordered_map<string, bool> judgeUser;
     ifstream _sysfile(MAINFILE, ios::in | ios::binary);
     size_t userNum = 0;
     _sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
@@ -449,14 +449,15 @@ void FileSys::adduser()
     {
         _sysfile.seekg(sizeof(size_t) + i * sizeof(User));
         _sysfile.read(reinterpret_cast<char *>(&user), sizeof(User));
-        judgeUser[user.username]=true;
+        judgeUser[user.username] = true;
     }
     _sysfile.close();
-    if(judgeUser[newUser.username]){
-        cout<<"用户名已存在，请重新注册！"<<endl;
-        return ;
+    if (judgeUser[newUser.username])
+    {
+        cout << "用户名已存在，请重新注册！" << endl;
+        return;
     }
-    
+
     p("Password:");
     cin >> newUser.password;
     Inode root(0);
@@ -579,93 +580,108 @@ void FileSys::cdback()
     return;
 }
 
-void FileSys::backup(){ //先找到再备份
-    ofstream file("dir.txt",ios::app);
-    file<<user.username<<endl;
-    int n=100;
-    for(int i=0;i<n;i++){
-        file<<h[i]<<" ";
+void FileSys::backup()
+{ //先找到再备份
+    ofstream file("dir.txt", ios::app);
+    file << user.username << endl;
+    int n = 100;
+    for (int i = 0; i < n; i++)
+    {
+        file << h[i] << " ";
     }
-    file<<endl;
-    for(int i=0;i<2*n;i++){
-        file<<e[i]<<" ";
+    file << endl;
+    for (int i = 0; i < 2 * n; i++)
+    {
+        file << e[i] << " ";
     }
-    file<<endl;
-    for(int i=0;i<2*n;i++){
-        file<<ne[i]<<" ";
+    file << endl;
+    for (int i = 0; i < 2 * n; i++)
+    {
+        file << ne[i] << " ";
     }
-    file<<endl;
-    for(int i=0;i<n;i++){
-        file<<depth[i]<<" ";
+    file << endl;
+    for (int i = 0; i < n; i++)
+    {
+        file << depth[i] << " ";
     }
-    file<<endl;
-    file<<id<<endl;
-    for(auto i:hash){
-        file<<i.first<<" "<<i.second<<" ";
+    file << endl;
+    file << id << endl;
+    for (auto i : hash)
+    {
+        file << i.first << " " << i.second << " ";
     }
-    file<<endl;
-    for(auto i:rhash){
-        file<<i.first<<" "<<i.second<<" ";
+    file << endl;
+    for (auto i : rhash)
+    {
+        file << i.first << " " << i.second << " ";
     }
-    file<<endl;
+    file << endl;
     file.close();
 }
 
-void FileSys::resume(){
+void FileSys::resume()
+{
     ifstream file("dir.txt");
     string line;
-    while(getline(file,line)){
-        if (line == user.username){
-            cout<<line<<endl;
-
-            getline(file,line); // h[]
+    while (getline(file, line))
+    {
+        if (line == user.username)
+        {
+            // cout<<line<<endl;
+            getline(file, line); // h[]
             stringstream ssh(line);
-            int i=0;
+            int i = 0;
             string res;
-            while(ssh>>res){
-                h[i++]=stoi(res);
+            while (ssh >> res)
+            {
+                h[i++] = stoi(res);
             }
 
-            line="";
-            getline(file,line); // e[]
+            line = "";
+            getline(file, line); // e[]
             stringstream sse(line);
-            i=0;
-            while(sse>>res)e[i++]=stoi(res);
+            i = 0;
+            while (sse >> res)
+                e[i++] = stoi(res);
 
-            line="";
-            getline(file,line); // ne[]
+            line = "";
+            getline(file, line); // ne[]
             stringstream ssne(line);
-            i=0;
-            while(ssne>>res)ne[i++]=stoi(res);
+            i = 0;
+            while (ssne >> res)
+                ne[i++] = stoi(res);
 
-            line="";
-            getline(file,line); // depth[]
+            line = "";
+            getline(file, line); // depth[]
             stringstream ssd(line);
-            i=0;
-            while(ssd>>res)depth[i++]=stoi(res);
+            i = 0;
+            while (ssd >> res)
+                depth[i++] = stoi(res);
 
-            line="";
-            getline(file,line); // id
-            id=stoi(line);
+            line = "";
+            getline(file, line); // id
+            id = stoi(line);
 
-            line="";
-            getline(file,line); // hash
+            line = "";
+            getline(file, line); // hash
             stringstream ssha(line);
-            string a,b;
-            while(ssha>>a>>b){
-                hash[stoi(a)]=b;
+            string a, b;
+            while (ssha >> a >> b)
+            {
+                hash[stoi(a)] = b;
             }
 
-            line="";
-            getline(file,line); // rhash
+            line = "";
+            getline(file, line); // rhash
             stringstream ssr(line);
-            while(ssr>>a>>b){
-                rhash[a]=stoi(b);
+            while (ssr >> a >> b)
+            {
+                rhash[a] = stoi(b);
             }
 
             break;
         }
     }
     file.close();
-    return ;
+    return;
 }
