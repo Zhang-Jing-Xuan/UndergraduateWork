@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include <cstring>
+#include <sstream>
 #include <algorithm>
 using namespace std;
 

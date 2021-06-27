@@ -28,7 +28,7 @@ private:
 
     int current;
     int total;
-    int h[100],e[2*100],ne[2*100],id,depth[100];
+    int h[200],e[2*200],ne[2*200],id,depth[200];
     unordered_map <int,string> hash;
     unordered_map <string,int> rhash;
     void add(int a,int b);
@@ -39,6 +39,8 @@ private:
     void mkdir();
     void cddir(string dst);
     void cdback();
+    void backup();
+    void resume();
 
     void printDir();
     void enterFileName();

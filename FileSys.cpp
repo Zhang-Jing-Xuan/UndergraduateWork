@@ -16,6 +16,8 @@ FileSys::FileSys()
     current = 0;                     // 当前处于哪一级目录
     total = 0;                       // 文件和文件夹的总数
     memset(depth, 0, sizeof(depth)); //初始化深度为空
+    hash.clear();
+    rhash.clear();
 }
 
 void FileSys::run()
@@ -37,6 +39,7 @@ void FileSys::run()
         p(prefix);
     }
     init();
+    resume();
     for (;;)
     {
         // cout<<"current = "<<current<<endl;
@@ -64,7 +67,10 @@ void FileSys::run()
         else if (command == "info")
             info();
         else if (command == "exit")
+        {
+            backup();
             break;
+        }
         else if (command == "mkdir")
             mkdir();
         else if (command == "cd")
@@ -571,4 +577,95 @@ void FileSys::cdback()
     }
     printf("回退失败！\n");
     return;
+}
+
+void FileSys::backup(){ //先找到再备份
+    ofstream file("dir.txt",ios::app);
+    file<<user.username<<endl;
+    int n=100;
+    for(int i=0;i<n;i++){
+        file<<h[i]<<" ";
+    }
+    file<<endl;
+    for(int i=0;i<2*n;i++){
+        file<<e[i]<<" ";
+    }
+    file<<endl;
+    for(int i=0;i<2*n;i++){
+        file<<ne[i]<<" ";
+    }
+    file<<endl;
+    for(int i=0;i<n;i++){
+        file<<depth[i]<<" ";
+    }
+    file<<endl;
+    file<<id<<endl;
+    for(auto i:hash){
+        file<<i.first<<" "<<i.second<<" ";
+    }
+    file<<endl;
+    for(auto i:rhash){
+        file<<i.first<<" "<<i.second<<" ";
+    }
+    file<<endl;
+    file.close();
+}
+
+void FileSys::resume(){
+    ifstream file("dir.txt");
+    string line;
+    while(getline(file,line)){
+        if (line == user.username){
+            cout<<line<<endl;
+
+            getline(file,line); // h[]
+            stringstream ssh(line);
+            int i=0;
+            string res;
+            while(ssh>>res){
+                h[i++]=stoi(res);
+            }
+
+            line="";
+            getline(file,line); // e[]
+            stringstream sse(line);
+            i=0;
+            while(sse>>res)e[i++]=stoi(res);
+
+            line="";
+            getline(file,line); // ne[]
+            stringstream ssne(line);
+            i=0;
+            while(ssne>>res)ne[i++]=stoi(res);
+
+            line="";
+            getline(file,line); // depth[]
+            stringstream ssd(line);
+            i=0;
+            while(ssd>>res)depth[i++]=stoi(res);
+
+            line="";
+            getline(file,line); // id
+            id=stoi(line);
+
+            line="";
+            getline(file,line); // hash
+            stringstream ssha(line);
+            string a,b;
+            while(ssha>>a>>b){
+                hash[stoi(a)]=b;
+            }
+
+            line="";
+            getline(file,line); // rhash
+            stringstream ssr(line);
+            while(ssr>>a>>b){
+                rhash[a]=stoi(b);
+            }
+
+            break;
+        }
+    }
+    file.close();
+    return ;
 }
