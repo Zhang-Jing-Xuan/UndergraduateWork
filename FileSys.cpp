@@ -545,79 +545,79 @@ void FileSys::cddir(string dst) // 用户cd到一个文件夹
 {
     for (int i = h[current]; ~i; i = ne[i]) // 邻接表遍历一层
     {
-        int j = e[i];
-        if (hash[j] == dst)
+        int j = e[i]; // j是i这条边指向的那个节点
+        if (hash[j] == dst) // 如果是用户想要进入的那个文件夹名称
         {
-            current = rhash[dst];
-            string x = prefix.substr(0, prefix.size() - 2);
-            prefix = x + "/" + dst + "$ ";
+            current = rhash[dst]; // 更改current
+            string x = prefix.substr(0, prefix.size() - 2); //输出当前目录
+            prefix = x + "/" + dst + "$ "; // 目录的拼接
             return;
         }
     }
-    printf("目录不存在！\n");
+    printf("目录不存在！\n"); // 如果上面没有return，就报错：目录不存在
 }
 
-void FileSys::cdback()
+void FileSys::cdback() // 用户退回到上一级目录
 {
-    if (current == 0)
+    if (current == 0) // 用户在根目录
     {
         printf("您已在根目录，无法回退！\n");
         return;
     }
-    for (int i = h[current]; ~i; i = ne[i])
+    for (int i = h[current]; ~i; i = ne[i]) // 邻接表遍历一层
     {
         int j = e[i];
-        if (depth[j] < depth[current])
+        if (depth[j] < depth[current]) // 如果这个节点的深度小于当前节点深度
         {
-            current = j;
-            for (int i = prefix.size(); i >= 0; i--)
+            current = j; //更新current节点
+            for (int i = prefix.size(); i >= 0; i--) // 反向遍历终端输出的内容
             {
-                if (prefix[i] == '/')
+                if (prefix[i] == '/') //找到最后一个'/'
                 {
-                    prefix = prefix.substr(0, i);
+                    prefix = prefix.substr(0, i); // 取到prefix的前i个字符
                     prefix = prefix + "$ ";
                     return;
                 }
             }
         }
     }
-    printf("回退失败！\n");
+    printf("回退失败！\n"); // 正常情况下都不会运行这条程序
     return;
 }
 
-void FileSys::writeBack()
+void FileSys::writeBack() // 写回到dir.txt
 {
-    ofstream file("dir.txt", ios::app);
-    file << user.username << endl;
+    ofstream file("dir.txt", ios::app); // 打开dir.txt，如果不存在就创建 
+    file << user.username << endl; // 将用户名写到文件
     int n = 100;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // 写回h数组
     {
         file << h[i] << " ";
     }
     file << endl;
-    for (int i = 0; i < 2 * n; i++)
+    for (int i = 0; i < 2 * n; i++) // 写回e数组
     {
         file << e[i] << " ";
     }
     file << endl;
-    for (int i = 0; i < 2 * n; i++)
+    for (int i = 0; i < 2 * n; i++) // 写回ne数组
     {
         file << ne[i] << " ";
     }
     file << endl;
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // 写回depth数组
     {
         file << depth[i] << " ";
     }
     file << endl;
-    file << id << endl;
-    file << total << endl;
-    for (auto i : hash)
+    file << id << endl; // 写回边的编号
+    file << total << endl; // 写回文件和文件夹的个数
+    for (auto i : hash) // 写回hash表
     {
         file << i.first << " " << i.second << " ";
     }
     file << endl;
-    for (auto i : rhash)
+    for (auto i : rhash) // 写回反hash表
     {
         file << i.first << " " << i.second << " ";
     }
@@ -628,17 +628,17 @@ void FileSys::writeBack()
 
 void FileSys::backup() //先找到再备份
 {
-    ifstream inFile("dir.txt", ios::in);
-    if (!inFile.is_open())
+    ifstream inFile("dir.txt", ios::in); // 只读方式打开文件dir.txt
+    if (!inFile.is_open()) // 如果该文件不存在
     {
-        writeBack();
+        writeBack(); // 就直接创建一个新的文件往里面写
     }
     else
     {
         string line;
-        while (getline(inFile, line))
+        while (getline(inFile, line)) // 遍历所有行
         {
-            if (line == user.username)
+            if (line == user.username) // 如果找到了用户名
             {
                 //写入
                 ofstream file("dir.txt", ios::in | ios::out);
@@ -647,34 +647,34 @@ void FileSys::backup() //先找到再备份
                 // cout << file.tellp() << endl;
                 // file << user.username << endl;
                 int n = 100;
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < n; i++) // 写回h数组
                 {
                     file << h[i] << " ";
                 }
                 file << endl;
-                for (int i = 0; i < 2 * n; i++)
+                for (int i = 0; i < 2 * n; i++) // 写回e数组
                 {
                     file << e[i] << " ";
                 }
                 file << endl;
-                for (int i = 0; i < 2 * n; i++)
+                for (int i = 0; i < 2 * n; i++) // 写回ne数组
                 {
                     file << ne[i] << " ";
                 }
                 file << endl;
-                for (int i = 0; i < n; i++)
+                for (int i = 0; i < n; i++) // 写回depth数组
                 {
                     file << depth[i] << " ";
                 }
                 file << endl;
-                file << id << endl;
-                file << total << endl;
-                for (auto i : hash)
+                file << id << endl; // 写回id
+                file << total << endl; // 写回total
+                for (auto i : hash) //写回hash
                 {
                     file << i.first << " " << i.second << " ";
                 }
                 file << endl;
-                for (auto i : rhash)
+                for (auto i : rhash) //写回rhash
                 {
                     file << i.first << " " << i.second << " ";
                 }
@@ -689,13 +689,13 @@ void FileSys::backup() //先找到再备份
     inFile.close();
 }
 
-void FileSys::resume()
+void FileSys::resume() //将dir.txt的内容恢复到邻接表
 {
-    ifstream file("dir.txt");
+    ifstream file("dir.txt"); // 只读打开dir.txt
     string line;
-    while (getline(file, line))
+    while (getline(file, line)) // 遍历所有行
     {
-        if (line == user.username)
+        if (line == user.username) // 如果找到用户名
         {
             // cout<<line<<endl;
             getline(file, line); // h[]
