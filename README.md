@@ -15,3 +15,6 @@
 
 ### 3. 字典树举例（用于文件名判重）
 ![字典树](images/DictionaryTreeB.jpeg)
+
+### 4. 寻找父节点
+![父节点](images/Tree.png)
