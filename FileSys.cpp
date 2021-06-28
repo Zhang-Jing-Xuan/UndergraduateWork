@@ -520,10 +520,6 @@ void FileSys::init()
     FileEntry temp;
     nowFileEntry = &temp;
     fileEntrys = file.getDir();
-    for (auto i : fileEntrys)
-     {
-         cout<<i.fileName<<" !!!!"<<endl;
-     }
 }
 
 void FileSys::add(int a, int b)
