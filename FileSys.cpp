@@ -3,13 +3,13 @@
 FileSys::FileSys()
 {
     prefix = "Administrator:";
-    ifstream checkFile(MAINFILE);
-    if (!checkFile.good())
+    ifstream checkFile(MAINFILE); // 查看文件是否创建
+    if (!checkFile.good()) // 若文件未创建，则进行初始化
     {
         checkFile.close();
         boot(); //启动
     }
-    else
+    else // 否则直接关闭文件
         checkFile.close();
     memset(h, -1, sizeof(h));        //初始化邻接表表头为空
     id = 0;                          // 文件夹的个数
@@ -25,68 +25,68 @@ void FileSys::run()
     printf("请输入register以注册用户，输入login以登录账号，按Ctrl+C退出\n");
     p(prefix);
     string command = "";
-    while (cin >> command)
+    while (cin >> command) // 读入命令
     {
-        transform(command.begin(), command.end(), command.begin(), ::tolower);
-        if (command == "login" && login())
+        transform(command.begin(), command.end(), command.begin(), ::tolower); // 将命令变成小写
+        if (command == "login" && login()) // 若命令是login,则调用login(),登录成功则break
             break;
-        if (command == "register")
+        if (command == "register") // 若命令是register,则调用adduser()，增加用户
             adduser();
-        if (command != "login" && command != "register")
+        if (command != "login" && command != "register") // 若为其他命令，则提示用户输入正确的命令
         {
             printf("请输入register以注册用户，输入login以登录账号，按Ctrl+C退出\n");
         }
         p(prefix);
     }
-    init();
+    init(); // 对该用户的文件系统进行初始化
     resume();
     for (;;)
     {
         // cout<<"current = "<<current<<endl;
         p(prefix);
-        cin >> command;
-        transform(command.begin(), command.end(), command.begin(), ::tolower);
-        if (command == "dir")
+        cin >> command; // 读入命令
+        transform(command.begin(), command.end(), command.begin(), ::tolower); // 将命令变成小写
+        if (command == "dir") // 若命令是dir，则输出当前目录的信息
             printDir();
-        else if (command == "create")
+        else if (command == "create") // 若命令是create，则在当前目录创建文件
             createFile();
-        else if (command == "delete")
+        else if (command == "delete") // 若命令是delete，则在当前目录删除文件
             deleteFile();
-        else if (command == "open")
+        else if (command == "open") // 若命令是open，则将file绑定到到文件的Inode
             openFile();
-        else if (command == "read")
+        else if (command == "read") // 若命令是read，则打开绑定好的file
             readFile();
-        else if (command == "overwrite")
+        else if (command == "overwrite") // 若命令是overwrite，则进行覆盖地写入文件
             writeFile();
-        else if (command == "append")
+        else if (command == "append") // 若命令是append，则进行额外增加地写入文件
             appendFile();
-        else if (command == "copy")
+        else if (command == "copy") // 若命令是copy，则指定两个文件，将第一个文件的内容复制到第二个文件中
             copyFile();
-        else if (command == "close")
+        else if (command == "close") // 若命令是close，则将file绑定的Inode置为NULL
             closeFile();
-        else if (command == "info")
+        else if (command == "info") // 若命令是info，则显示系统相关信息，如磁盘容量，用户数量以及可用命令
             info();
-        else if (command == "exit")
+        else if (command == "exit") // 若命令是exit，对dir.txt进行备份再退出当前用户的文件系统，回到登录系统
         {
             backup();
             break;
         }
-        else if (command == "mkdir")
+        else if (command == "mkdir") // 若命令是mkdir，则在当前目录下创建新目录
             mkdir();
-        else if (command == "cd")
+        else if (command == "cd") // 若命令是cd，则打开指定的目录或回退到上一级目录
         {
             string dst;
             cin >> dst;
-            if (dst == "..")
+            if (dst == "..") // 目录名是..，则回退到上一级目录
             {
                 cdback();
             }
-            else
+            else // 打开指定的目录名
             {
                 cddir(dst);
             }
         }
-        else
+        else // 若命令没有匹配到，说明命令出错
         {
             printf("命令出错!\n");
         }
@@ -98,10 +98,10 @@ void FileSys::printDir()
     int x=0;
     for (int i = h[current]; ~i; i = ne[i])
     {
-        int j = e[i];
-        if (depth[j] == depth[current] + 1)
+        int j = e[i]; // 获取边的编号
+        if (depth[j] == depth[current] + 1) // 若是下一级目录，输出新的目录信息
         {
-            if(x==0)printf("Folder:\n");
+            if(x==0)printf("Folder:\n"); // Folder:只输出一次
             cout << hash[j] << "\t";
             x++;
         }
@@ -111,21 +111,21 @@ void FileSys::printDir()
     if (fileEntrys.size() == 0)
         return;
     
-    for (FileEntry &i : fileEntrys)
+    for (FileEntry &i : fileEntrys) // 遍历文件表项
     {
-        if (i.fileName[strlen(i.fileName) - 1] - '0' == current)
+        if (i.fileName[strlen(i.fileName) - 1] - '0' == current) // 如果是当前层的文件
         {
             if(x==0)cout << left << setw(15) << "FileName" << setw(9) << "Address" << setw(15) << "Protect code" << setw(10) << "Length" << endl;
             char a[30];
-            strcpy(a, i.fileName);
-            a[strlen(i.fileName) - 1] = '\0';
-            cout << left << setw(15) << a << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl;
+            strcpy(a, i.fileName); // 拷贝文件名
+            a[strlen(i.fileName) - 1] = '\0'; // 将最后一位'0'置换为'\0'
+            cout << left << setw(15) << a << setw(9) << i.address << setw(15) << pcToBinary(i.protectCode) << setw(10) << i.length << endl; // 输出文件信息，将八进制保护码转换为二进制
             x++;
         }
     }
 }
 
-void FileSys::enterFileName()
+void FileSys::enterFileName() // 键入文件名
 {
     p("fileName:");
     cin >> fileName;
@@ -134,17 +134,17 @@ void FileSys::enterFileName()
 void FileSys::createFile()
 {
     enterFileName(); //FileSys的filename
-    fileName = fileName + to_string(current);
-    dicInit();
-    for (FileEntry &i : fileEntrys)
+    fileName = fileName + to_string(current); // 在文件名后加上当前目录层数
+    dicInit(); // 字典树初始化
+    for (FileEntry &i : fileEntrys) // 遍历文件表项
     {
-        if (i.fileName[strlen(i.fileName) - 1] - '0' == current)
+        if (i.fileName[strlen(i.fileName) - 1] - '0' == current) // 找到文件所在层数
         {
-            insert(i.fileName);
+            insert(i.fileName); // 插入文件名到字典树中
             // cout<<"已插入到字典树"<<i.fileName<<" "<<query(i.fileName)<<endl;
         }
     }
-    if (query(fileName.c_str()) >= 1)
+    if (query(fileName.c_str()) >= 1) // 查找是否存在同名文件
     {
         printf("已存在同名文件！\n");
         return;
@@ -152,14 +152,14 @@ void FileSys::createFile()
     pln("Protect Code(three-bit integer): ");
     int pc; //保护码
     cin >> pc;
-    FileEntry newfe;
-    auto len = fileName.size();
-    len = len < 30 ? len : 29;
+    FileEntry newfe; // 初始化新文件
+    auto len = fileName.size(); // 获取文件名长度
+    len = len < 30 ? len : 29; // 文件名长度应该小于30
     fileName.copy(newfe.fileName, len); //把fileName拷贝到newfe.fileName
-    newfe.fileName[len] = '\0';
-    newfe.protectCode = pc;
+    newfe.fileName[len] = '\0'; // 在文件名后加上结束符
+    newfe.protectCode = pc; // 读入保护码
     //新的inode
-    Inode newinode(0);
+    Inode newinode(0); // 初始化新节点
     auto address = inodeTable.add(&newinode); //添加一个索引节点
     newfe.address = address;                  //newfe文件地址
     fileEntrys.push_back(newfe);
@@ -201,18 +201,18 @@ int FileSys::openFile() // 打开文件
     return -1;
 }
 
-void FileSys::deleteFile()
+void FileSys::deleteFile() // 删除文件
 {
-    enterFileName();
+    enterFileName(); // 用户输入文件名
     fileName = fileName + to_string(current);
-    for (auto i = fileEntrys.begin(); i < fileEntrys.end(); ++i)
+    for (auto i = fileEntrys.begin(); i < fileEntrys.end(); ++i) // 遍历文件
     {
-        if (string(i->fileName) == fileName)
+        if (string(i->fileName) == fileName) // 找到文件
         {
-            fileEntrys.erase(i);
+            fileEntrys.erase(i); // 删除该文件表项
             // 绑定inode到根目录
             file.setInode(&rootDir);
-            file.writeDir(fileEntrys, user.inodeAddress);
+            file.writeDir(fileEntrys, user.inodeAddress); //写inode为目录
             pln("Delete Successfully");
             return;
         }
@@ -220,32 +220,32 @@ void FileSys::deleteFile()
     pln("No Such File");
 }
 
-void FileSys::closeFile()
+void FileSys::closeFile() // 关闭文件
 {
-    if (file.getInode() == NULL)
+    if (file.getInode() == NULL) // 若file绑定Inode为空，则关闭失败
     {
         pln("Close Failed");
         return;
     }
     // pln("delete success");
-    delete file.getInode();
-    file.setInode(NULL);
-    nowFileEntry = NULL;
+    delete file.getInode(); // 删除绑定的节点
+    file.setInode(NULL); // 将file绑定的Inode节点置为NULL
+    nowFileEntry = NULL; // 当前文件表项置为NULL
     pln("Close Successfully");
 }
 
 void FileSys::readFile()
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
     }
-    pln(file.readAll());
+    pln(file.readAll()); // 输出所读文件内容
 }
 
-void FileSys::pln(const string &s) { cout << s << endl; }
-void FileSys::p(const string &s) { cout << s; }
+void FileSys::pln(const string &s) { cout << s << endl; } // 有换行输出
+void FileSys::p(const string &s) { cout << s; } // 无换行输出
 
 void FileSys::copyFile()
 {
@@ -279,19 +279,19 @@ void FileSys::copyWrite() // 写入目标文件
     file.writeDir(fileEntrys, user.inodeAddress);      //写inode为目录
 }
 
-void FileSys::appendFile()
+void FileSys::appendFile() // 增加写入
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
     }
-    copyRead();
+    copyRead(); // 复制文件本身内容
     pln("write here. End with '$EOF'");
     string res = "", line = "";
     cin.clear();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //清除当前行
-    for (;;)
+    for (;;) // 若写入内容没有$EOF,则一直写入
     {
         getline(cin, line);
         auto pos = line.find("$EOF");
@@ -321,7 +321,7 @@ void FileSys::appendFile()
 
 void FileSys::writeFile()
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName)
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
@@ -330,7 +330,7 @@ void FileSys::writeFile()
     string res = "", line = "";
     cin.clear();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //清除当前行
-    for (;;)
+    for (;;) // 若写入内容没有$EOF,则一直写入
     {
         getline(cin, line);
         auto pos = line.find("$EOF");
@@ -372,12 +372,12 @@ void FileSys::boot()
     inodeTable = InodeTable(); //实例化索引表
 }
 
-string FileSys::pcToBinary(int n)
+string FileSys::pcToBinary(int n) // 将对应的八进制转换为二进制
 {
     string res = "";
     auto convert = [&res](int i) // lambda表达式
     {
-        switch (i)
+        switch (i) // 将对应的八进制转换为二进制
         {
         case 0:
             res += "000";
@@ -405,6 +405,7 @@ string FileSys::pcToBinary(int n)
             break;
         }
     };
+    // 读取各位数
     convert(n / 100);
     convert(n % 100 / 10);
     convert(n % 10);
@@ -415,14 +416,14 @@ bool FileSys::login()
 {
     string username, password;
     p("Username: ");
-    cin >> username;
+    cin >> username; // 读入用户名
     p("Password: ");
-    cin >> password;
+    cin >> password; // 读入密码
     //读取主文件的用户，进行匹配登录
     ifstream sysfile(MAINFILE, ios::in | ios::binary);
     size_t userNum = 0;
-    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
-    for (size_t i = 0; i < userNum; ++i)
+    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t)); // 获取用户数量
+    for (size_t i = 0; i < userNum; ++i) // 遍历每个用户信息，匹配对应用户
     {
         sysfile.seekg(sizeof(size_t) + i * sizeof(User));
         sysfile.read(reinterpret_cast<char *>(&user), sizeof(User));
@@ -444,13 +445,13 @@ void FileSys::adduser()
 {
     User newUser;
     p("Username:");
-    cin >> newUser.username;
+    cin >> newUser.username; // 读入用户名
 
     unordered_map<string, bool> judgeUser;
     ifstream _sysfile(MAINFILE, ios::in | ios::binary);
     size_t userNum = 0;
-    _sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
-    for (size_t i = 0; i < userNum; ++i)
+    _sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t)); // 获取用户数量
+    for (size_t i = 0; i < userNum; ++i) // 遍历每个用户，查看是否重名
     {
         _sysfile.seekg(sizeof(size_t) + i * sizeof(User));
         _sysfile.read(reinterpret_cast<char *>(&user), sizeof(User));
@@ -464,17 +465,17 @@ void FileSys::adduser()
     }
 
     p("Password:");
-    cin >> newUser.password;
-    Inode root(0);
-    newUser.inodeAddress = inodeTable.add(&root);
+    cin >> newUser.password; // 读入密码
+    Inode root(0); // 新建根节点
+    newUser.inodeAddress = inodeTable.add(&root); // 添加一个根节点，返回其地址
     fstream sysfile(MAINFILE, ios::in | ios::out | ios::binary);
     userNum = 0;
-    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
+    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t)); // 获取用户数量
     sysfile.seekp(sizeof(size_t) + userNum * sizeof(User)); //将文件写入位置移到sizeof(size_t) + userNum * sizeof(User)
-    sysfile.write(reinterpret_cast<const char *>(&newUser), sizeof(User));
-    ++userNum;
+    sysfile.write(reinterpret_cast<const char *>(&newUser), sizeof(User)); // 写入新用户信息
+    ++userNum; // 增加用户数量
     sysfile.seekp(0); // 将文件写入位置移到开头
-    sysfile.write(reinterpret_cast<const char *>(&userNum), sizeof(size_t));
+    sysfile.write(reinterpret_cast<const char *>(&userNum), sizeof(size_t)); // 更新用户数量
     sysfile.close();
 }
 
@@ -501,11 +502,11 @@ void FileSys::info()
 ");
 }
 
-void FileSys::readnum()
+void FileSys::readnum() // 获取用户数量
 {
     fstream sysfile(MAINFILE, ios::in | ios::out | ios::binary);
     size_t userNum = 0;
-    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));
+    sysfile.read(reinterpret_cast<char *>(&userNum), sizeof(size_t));  // 获取用户数量
     user_num = userNum;
 }
 
@@ -514,12 +515,12 @@ void FileSys::init()
     prefix += "~ " + string(user.username) + "$ "; //~zjx$
     ifstream sysfile(DATAFILE, ios::in | ios::binary);
     sysfile.seekg(user.inodeAddress); //根目录的inode地址
-    sysfile.read(reinterpret_cast<char *>(&rootDir), sizeof(Inode));
+    sysfile.read(reinterpret_cast<char *>(&rootDir), sizeof(Inode)); // 读取根目录Inode信息
     sysfile.close();
-    file.setInode(&rootDir);
+    file.setInode(&rootDir); // 将file绑定在根节点上
     FileEntry temp;
-    nowFileEntry = &temp;
-    fileEntrys = file.getDir();
+    nowFileEntry = &temp;  // 初始化当前文件表项为空
+    fileEntrys = file.getDir(); // 获取当前目录下的所有文件信息
 }
 
 void FileSys::add(int a, int b)  // 边a->b
