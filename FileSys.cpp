@@ -522,28 +522,28 @@ void FileSys::init()
     fileEntrys = file.getDir();
 }
 
-void FileSys::add(int a, int b)
+void FileSys::add(int a, int b)  // 边a->b
 {
-    e[id] = b;
-    ne[id] = h[a];
-    h[a] = id++;
+    e[id] = b; // 这条边指向b
+    ne[id] = h[a]; // 这条边的next指针指向a的头指针
+    h[a] = id++; //a的头指向新的边
 }
 
-void FileSys::mkdir()
+void FileSys::mkdir() // 创建新的文件夹
 {
-    string folderName;
+    string folderName; //用户输入文件夹名称
     cin >> folderName;
-    total++;
-    depth[total] = depth[current] + 1;
-    add(current, total);
-    add(total, current);
-    hash[total] = folderName;
-    rhash[folderName] = total;
+    total++; // 文件夹和文件的个数加一
+    depth[total] = depth[current] + 1; // 这个文件夹的深度等于current所在节点的深度加一
+    add(current, total); // current节点和total节点连一条边
+    add(total, current); // total节点和current节点连一条边
+    hash[total] = folderName; //更新哈希表
+    rhash[folderName] = total; //更新反哈希表
 }
 
-void FileSys::cddir(string dst)
+void FileSys::cddir(string dst) // 用户cd到一个文件夹
 {
-    for (int i = h[current]; ~i; i = ne[i])
+    for (int i = h[current]; ~i; i = ne[i]) // 邻接表遍历一层
     {
         int j = e[i];
         if (hash[j] == dst)
