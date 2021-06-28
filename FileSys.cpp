@@ -22,7 +22,7 @@ FileSys::FileSys()
 
 void FileSys::run()
 {
-    printf("请输入regist以注册用户，输入login以登录账号，按Ctrl+C退出\n");
+    printf("请输入register以注册用户，输入login以登录账号，按Ctrl+C退出\n");
     p(prefix);
     string command = "";
     while (cin >> command)
@@ -30,11 +30,11 @@ void FileSys::run()
         transform(command.begin(), command.end(), command.begin(), ::tolower);
         if (command == "login" && login())
             break;
-        if (command == "regist")
+        if (command == "register")
             adduser();
-        if (command != "login" && command != "regist")
+        if (command != "login" && command != "register")
         {
-            printf("请输入regist以注册用户，输入login以登录账号，按Ctrl+C退出\n");
+            printf("请输入register以注册用户，输入login以登录账号，按Ctrl+C退出\n");
         }
         p(prefix);
     }
@@ -520,6 +520,10 @@ void FileSys::init()
     FileEntry temp;
     nowFileEntry = &temp;
     fileEntrys = file.getDir();
+    for (auto i : fileEntrys)
+     {
+         cout<<i.fileName<<" !!!!"<<endl;
+     }
 }
 
 void FileSys::add(int a, int b)

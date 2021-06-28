@@ -14,7 +14,9 @@ vector<FileEntry> File::getDir()
             switch (flag)
             {
             case FILENAME:
-                field.copy(now.fileName, field.length() < 30 ? field.length() : 29);
+                // field.copy(now.fileName, field.length() < 30 ? field.length() : 29);
+                strcpy(now.fileName,field.c_str());
+
                 break;
             case ADDRESS:
                 now.address = stoi(field);
@@ -34,7 +36,7 @@ vector<FileEntry> File::getDir()
     }
     // for (auto i : res)
     //  {
-    //      insert(i.fileName);
+    //      cout<<i.fileName<<" !!"<<endl;
     //  }
     return res;
 }
