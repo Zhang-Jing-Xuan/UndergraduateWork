@@ -236,7 +236,7 @@ void FileSys::closeFile() // 关闭文件
 
 void FileSys::readFile()
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName || strlen(nowFileEntry->fileName)==0) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
@@ -281,7 +281,7 @@ void FileSys::copyWrite() // 写入目标文件
 
 void FileSys::appendFile() // 增加写入
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName||strlen(nowFileEntry->fileName)==0) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
@@ -305,7 +305,7 @@ void FileSys::appendFile() // 增加写入
         line += '\n';
         res += line;
     }
-    res = res.substr(0, res.size() - 1);
+    // res = res.substr(0, res.size() - 1);
     tmp = tmp.substr(0, tmp.size() - 1);
     // cout<<tmp<<" "<<res<<endl;
     res = tmp + res;
@@ -321,7 +321,7 @@ void FileSys::appendFile() // 增加写入
 
 void FileSys::writeFile()
 {
-    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName) // 若当前文件表项为空或不为指定的文件
+    if (nowFileEntry == NULL || nowFileEntry->fileName != fileName||strlen(nowFileEntry->fileName)==0) // 若当前文件表项为空或不为指定的文件
     {
         printf("请先打开该文件！\n");
         return;
