@@ -1,4 +1,4 @@
-# 选择cmd，不要选择powerShell
+## 选择cmd，不要选择powerShell
 
 ## flex myscanner.l
 
