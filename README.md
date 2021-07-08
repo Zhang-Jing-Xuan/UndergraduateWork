@@ -6,6 +6,10 @@
 
 ## LR1->LR1.cpp  LR1.txt  ------ LR(1)自底向上语法分析
 
-# lex
+# lex learning
 
 ## myscanner ------ flex的一个例子 [lex turtorial](https://www.youtube.com/watch?v=54bo1qaHAfk "lex turtorial")
+
+# yacc learning
+
+## mycalc ------ bison的一个例子 [yacc turtorial](https://www.youtube.com/watch?v=__-wUHG2rfM "yacc turtorial")
