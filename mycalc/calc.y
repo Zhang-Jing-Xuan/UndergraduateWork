@@ -10,12 +10,12 @@ void updateSymbolVal(char symbol, int val);
 %}
 
 %union {int num; char id;}         /* Yacc definitions */
-%start line
-%token print
-%token exit_command
+%start line /*开始符号*/
+%token print /*终结符*/
+%token exit_command 
 %token <num> number
 %token <id> identifier
-%type <num> line exp term 
+%type <num> line exp term  /* 非终结符 */
 %type <id> assignment
 
 %%
