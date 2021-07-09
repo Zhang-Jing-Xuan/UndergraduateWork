@@ -1,0 +1,9 @@
+main(){
+float a;
+float b;
+a = 39.0/3.00;
+printID a;
+b = 7.0*3.0;
+printID b;
+printExp a-b/7.0+a;
+}

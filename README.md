@@ -18,4 +18,6 @@
 
 ## helloWorld ------ bison的另一个例子 [yacc turtorial](https://www.youtube.com/watch?v=POjnw0xEVas&list=PLIrl0f9NJZy4oOOAVPU6MyRdFjJFGtceu&index=1)
 
+## miniCompile ------ bison的另一个例子 [yacc turtorial](https://github.com/sanved77/mini-compiler)
+
 ![yacc&lex](images/yacc.PNG)
