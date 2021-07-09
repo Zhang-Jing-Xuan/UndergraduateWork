@@ -9,3 +9,11 @@
 ## g++ lex.yy.o yacc.tab.o -o main
 
 ## ./main
+
+--------------------------------------------
+
+## cd build
+
+## make
+
+## ./main

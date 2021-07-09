@@ -1,0 +1,12 @@
+[
+{
+  "directory": "C:/Code/PL_0Compiler/Others/completeExample/build",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -std=c++11 -g -o CMakeFiles\\main.dir\\parser.cpp.obj -c C:\\Code\\PL_0Compiler\\Others\\completeExample\\build\\parser.cpp",
+  "file": "C:/Code/PL_0Compiler/Others/completeExample/build/parser.cpp"
+},
+{
+  "directory": "C:/Code/PL_0Compiler/Others/completeExample/build",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe  @CMakeFiles/main.dir/includes_CXX.rsp -std=c++11 -g -o CMakeFiles\\main.dir\\scanner.cpp.obj -c C:\\Code\\PL_0Compiler\\Others\\completeExample\\build\\scanner.cpp",
+  "file": "C:/Code/PL_0Compiler/Others/completeExample/build/scanner.cpp"
+}
+]
