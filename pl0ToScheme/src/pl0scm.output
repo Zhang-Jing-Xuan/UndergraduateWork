@@ -1,0 +1,1799 @@
+Conflict in state 80 between rule 74 and token ADDOP resolved as reduce.
+Conflict in state 80 between rule 74 and token SUBOP resolved as reduce.
+Conflict in state 80 between rule 74 and token MULOP resolved as reduce.
+Conflict in state 80 between rule 74 and token DIVOP resolved as reduce.
+Conflict in state 107 between rule 69 and token ADDOP resolved as reduce.
+Conflict in state 107 between rule 69 and token SUBOP resolved as reduce.
+Conflict in state 107 between rule 69 and token MULOP resolved as shift.
+Conflict in state 107 between rule 69 and token DIVOP resolved as shift.
+Conflict in state 108 between rule 70 and token ADDOP resolved as reduce.
+Conflict in state 108 between rule 70 and token SUBOP resolved as reduce.
+Conflict in state 108 between rule 70 and token MULOP resolved as shift.
+Conflict in state 108 between rule 70 and token DIVOP resolved as shift.
+Conflict in state 109 between rule 71 and token ADDOP resolved as reduce.
+Conflict in state 109 between rule 71 and token SUBOP resolved as reduce.
+Conflict in state 109 between rule 71 and token MULOP resolved as reduce.
+Conflict in state 109 between rule 71 and token DIVOP resolved as reduce.
+Conflict in state 110 between rule 72 and token ADDOP resolved as reduce.
+Conflict in state 110 between rule 72 and token SUBOP resolved as reduce.
+Conflict in state 110 between rule 72 and token MULOP resolved as reduce.
+Conflict in state 110 between rule 72 and token DIVOP resolved as reduce.
+State 129 contains 1 shift/reduce conflict.
+
+Grammar
+rule 1    program -> block '.'
+rule 2    block -> block_start const_dec var_dec block_dec_end proc_func_dec statement
+rule 3    block_start ->		/* empty */
+rule 4    block_dec_end ->		/* empty */
+rule 5    const_dec ->		/* empty */
+rule 6    const_dec -> B_CONST const_list ';'
+rule 7    const_list -> const_elem
+rule 8    const_list -> const_list ',' const_elem
+rule 9    const_elem -> IDENT EQOP NUMBER
+rule 10   var_dec ->		/* empty */
+rule 11   var_dec -> B_VAR var_list ';'
+rule 12   var_list -> var_elem
+rule 13   var_list -> var_list ',' var_elem
+rule 14   var_elem -> IDENT
+rule 15   proc_func_dec ->		/* empty */
+rule 16   proc_func_dec -> proc_func_dec proc_func
+rule 17   proc_func -> proc_list
+rule 18   proc_func -> func_list
+rule 19   @1 ->		/* empty */
+rule 20   @2 ->		/* empty */
+rule 21   proc_list -> B_PROCEDURE IDENT @1 arg_list_dec ';' @2 block ';'
+rule 22   @3 ->		/* empty */
+rule 23   @4 ->		/* empty */
+rule 24   func_list -> B_FUNCTION IDENT @3 arg_list_dec ';' @4 block ';'
+rule 25   arg_list_dec ->		/* empty */
+rule 26   arg_list_dec -> LP arg_list RP
+rule 27   arg_list -> arg_elem
+rule 28   arg_list -> arg_list ',' arg_elem
+rule 29   arg_elem -> IDENT
+rule 30   statement ->		/* empty */
+rule 31   statement -> assign
+rule 32   statement -> call_stmt
+rule 33   statement -> block_stmt
+rule 34   statement -> if_stmt
+rule 35   statement -> while_stmt
+rule 36   statement -> writeln_stmt
+rule 37   statement -> write_stmt
+rule 38   stmt_list -> statement
+rule 39   stmt_list -> stmt_list ';' statement
+rule 40   @5 ->		/* empty */
+rule 41   block_stmt -> B_BEGIN @5 stmt_list B_END
+rule 42   assign -> IDENT ASSIGNOP expr
+rule 43   @6 ->		/* empty */
+rule 44   call_stmt -> B_CALL IDENT @6 actual_arg
+rule 45   actual_arg ->		/* empty */
+rule 46   actual_arg -> LP expr_list RP
+rule 47   expr_list -> expr
+rule 48   expr_list -> expr_list ',' expr
+rule 49   @7 ->		/* empty */
+rule 50   @8 ->		/* empty */
+rule 51   @9 ->		/* empty */
+rule 52   if_stmt -> B_IF @7 condition B_THEN @8 statement @9 else_part
+rule 53   else_part ->		/* empty */
+rule 54   @10 ->		/* empty */
+rule 55   else_part -> B_ELSE @10 statement
+rule 56   @11 ->		/* empty */
+rule 57   @12 ->		/* empty */
+rule 58   while_stmt -> B_WHILE @11 condition B_DO @12 statement
+rule 59   writeln_stmt -> WRITELN
+rule 60   writeln_stmt -> WRITELN LP write_list RP
+rule 61   write_stmt -> WRITE LP write_list RP
+rule 62   write_list -> write_elem
+rule 63   write_list -> write_list ',' write_elem
+rule 64   write_elem -> expr
+rule 65   write_elem -> STRING
+rule 66   condition -> expr COMPOP expr
+rule 67   condition -> expr EQOP expr
+rule 68   condition -> ODD expr
+rule 69   expr -> expr ADDOP expr
+rule 70   expr -> expr SUBOP expr
+rule 71   expr -> expr MULOP expr
+rule 72   expr -> expr DIVOP expr
+rule 73   expr -> LP expr RP
+rule 74   expr -> SUBOP expr
+rule 75   expr -> NUMBER
+rule 76   expr -> IDENT
+rule 77   expr -> IDENT LP farg RP
+rule 78   farg ->		/* empty */
+rule 79   farg -> farg_list
+rule 80   farg_list -> expr
+rule 81   farg_list -> farg_list ',' expr
+
+Terminals, with rules where they appear
+
+$ (-1)
+',' (44) 8 13 28 48 63 81
+'.' (46) 1
+';' (59) 6 11 21 24 39
+error (256)
+B_CONST (257) 6
+B_VAR (258) 11
+B_PROCEDURE (259) 21
+B_FUNCTION (260) 24
+B_BEGIN (261) 41
+B_END (262) 41
+B_IF (263) 52
+B_THEN (264) 52
+B_ELSE (265) 55
+B_WHILE (266) 58
+B_DO (267) 58
+B_CALL (268) 44
+NUMBER (269) 9 75
+COMPOP (270) 66
+EQOP (271) 9 67
+ODD (272) 68
+WRITE (273) 61
+WRITELN (274) 59 60
+ASSIGNOP (275) 42
+IDENT (276) 9 14 21 24 29 42 44 76 77
+STRING (277) 65
+LP (278) 26 46 60 61 73 77
+RP (279) 26 46 60 61 73 77
+ADDOP (280) 69
+SUBOP (281) 70 74
+MULOP (282) 71
+DIVOP (283) 72
+UMINUS (284)
+
+Nonterminals, with rules where they appear
+
+program (34)
+    on left: 1
+block (35)
+    on left: 2, on right: 1 21 24
+block_start (36)
+    on left: 3, on right: 2
+block_dec_end (37)
+    on left: 4, on right: 2
+const_dec (38)
+    on left: 5 6, on right: 2
+const_list (39)
+    on left: 7 8, on right: 6 8
+const_elem (40)
+    on left: 9, on right: 7 8
+var_dec (41)
+    on left: 10 11, on right: 2
+var_list (42)
+    on left: 12 13, on right: 11 13
+var_elem (43)
+    on left: 14, on right: 12 13
+proc_func_dec (44)
+    on left: 15 16, on right: 2 16
+proc_func (45)
+    on left: 17 18, on right: 16
+proc_list (46)
+    on left: 21, on right: 17
+@1 (47)
+    on left: 19, on right: 21
+@2 (48)
+    on left: 20, on right: 21
+func_list (49)
+    on left: 24, on right: 18
+@3 (50)
+    on left: 22, on right: 24
+@4 (51)
+    on left: 23, on right: 24
+arg_list_dec (52)
+    on left: 25 26, on right: 21 24
+arg_list (53)
+    on left: 27 28, on right: 26 28
+arg_elem (54)
+    on left: 29, on right: 27 28
+statement (55)
+    on left: 30 31 32 33 34 35 36 37, on right: 2 38 39 52 55 58
+stmt_list (56)
+    on left: 38 39, on right: 39 41
+block_stmt (57)
+    on left: 41, on right: 33
+@5 (58)
+    on left: 40, on right: 41
+assign (59)
+    on left: 42, on right: 31
+call_stmt (60)
+    on left: 44, on right: 32
+@6 (61)
+    on left: 43, on right: 44
+actual_arg (62)
+    on left: 45 46, on right: 44
+expr_list (63)
+    on left: 47 48, on right: 46 48
+if_stmt (64)
+    on left: 52, on right: 34
+@7 (65)
+    on left: 49, on right: 52
+@8 (66)
+    on left: 50, on right: 52
+@9 (67)
+    on left: 51, on right: 52
+else_part (68)
+    on left: 53 55, on right: 52
+@10 (69)
+    on left: 54, on right: 55
+while_stmt (70)
+    on left: 58, on right: 35
+@11 (71)
+    on left: 56, on right: 58
+@12 (72)
+    on left: 57, on right: 58
+writeln_stmt (73)
+    on left: 59 60, on right: 36
+write_stmt (74)
+    on left: 61, on right: 37
+write_list (75)
+    on left: 62 63, on right: 60 61 63
+write_elem (76)
+    on left: 64 65, on right: 62 63
+condition (77)
+    on left: 66 67 68, on right: 52 58
+expr (78)
+    on left: 69 70 71 72 73 74 75 76 77, on right: 42 47 48 64 66 67
+    68 69 70 71 72 73 74 80 81
+farg (79)
+    on left: 78 79, on right: 77
+farg_list (80)
+    on left: 80 81, on right: 79 81
+
+
+state 0
+
+    $default	reduce using rule 3 (block_start)
+
+    program	go to state 137
+    block	go to state 1
+    block_start	go to state 2
+
+
+
+state 1
+
+    program  ->  block . '.'   (rule 1)
+
+    '.' 	shift, and go to state 3
+
+
+
+state 2
+
+    block  ->  block_start . const_dec var_dec block_dec_end proc_func_dec statement   (rule 2)
+
+    B_CONST	shift, and go to state 4
+
+    $default	reduce using rule 5 (const_dec)
+
+    const_dec	go to state 5
+
+
+
+state 3
+
+    program  ->  block '.' .   (rule 1)
+
+    $default	reduce using rule 1 (program)
+
+
+
+state 4
+
+    const_dec  ->  B_CONST . const_list ';'   (rule 6)
+
+    IDENT	shift, and go to state 6
+
+    const_list	go to state 7
+    const_elem	go to state 8
+
+
+
+state 5
+
+    block  ->  block_start const_dec . var_dec block_dec_end proc_func_dec statement   (rule 2)
+
+    B_VAR	shift, and go to state 9
+
+    $default	reduce using rule 10 (var_dec)
+
+    var_dec	go to state 10
+
+
+
+state 6
+
+    const_elem  ->  IDENT . EQOP NUMBER   (rule 9)
+
+    EQOP	shift, and go to state 11
+
+
+
+state 7
+
+    const_dec  ->  B_CONST const_list . ';'   (rule 6)
+    const_list  ->  const_list . ',' const_elem   (rule 8)
+
+    ';' 	shift, and go to state 12
+    ',' 	shift, and go to state 13
+
+
+
+state 8
+
+    const_list  ->  const_elem .   (rule 7)
+
+    $default	reduce using rule 7 (const_list)
+
+
+
+state 9
+
+    var_dec  ->  B_VAR . var_list ';'   (rule 11)
+
+    IDENT	shift, and go to state 14
+
+    var_list	go to state 15
+    var_elem	go to state 16
+
+
+
+state 10
+
+    block  ->  block_start const_dec var_dec . block_dec_end proc_func_dec statement   (rule 2)
+
+    $default	reduce using rule 4 (block_dec_end)
+
+    block_dec_end	go to state 17
+
+
+
+state 11
+
+    const_elem  ->  IDENT EQOP . NUMBER   (rule 9)
+
+    NUMBER	shift, and go to state 18
+
+
+
+state 12
+
+    const_dec  ->  B_CONST const_list ';' .   (rule 6)
+
+    $default	reduce using rule 6 (const_dec)
+
+
+
+state 13
+
+    const_list  ->  const_list ',' . const_elem   (rule 8)
+
+    IDENT	shift, and go to state 6
+
+    const_elem	go to state 19
+
+
+
+state 14
+
+    var_elem  ->  IDENT .   (rule 14)
+
+    $default	reduce using rule 14 (var_elem)
+
+
+
+state 15
+
+    var_dec  ->  B_VAR var_list . ';'   (rule 11)
+    var_list  ->  var_list . ',' var_elem   (rule 13)
+
+    ';' 	shift, and go to state 20
+    ',' 	shift, and go to state 21
+
+
+
+state 16
+
+    var_list  ->  var_elem .   (rule 12)
+
+    $default	reduce using rule 12 (var_list)
+
+
+
+state 17
+
+    block  ->  block_start const_dec var_dec block_dec_end . proc_func_dec statement   (rule 2)
+
+    $default	reduce using rule 15 (proc_func_dec)
+
+    proc_func_dec	go to state 22
+
+
+
+state 18
+
+    const_elem  ->  IDENT EQOP NUMBER .   (rule 9)
+
+    $default	reduce using rule 9 (const_elem)
+
+
+
+state 19
+
+    const_list  ->  const_list ',' const_elem .   (rule 8)
+
+    $default	reduce using rule 8 (const_list)
+
+
+
+state 20
+
+    var_dec  ->  B_VAR var_list ';' .   (rule 11)
+
+    $default	reduce using rule 11 (var_dec)
+
+
+
+state 21
+
+    var_list  ->  var_list ',' . var_elem   (rule 13)
+
+    IDENT	shift, and go to state 14
+
+    var_elem	go to state 23
+
+
+
+state 22
+
+    block  ->  block_start const_dec var_dec block_dec_end proc_func_dec . statement   (rule 2)
+    proc_func_dec  ->  proc_func_dec . proc_func   (rule 16)
+
+    B_PROCEDURE	shift, and go to state 24
+    B_FUNCTION	shift, and go to state 25
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    proc_func	go to state 33
+    proc_list	go to state 34
+    func_list	go to state 35
+    statement	go to state 36
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 23
+
+    var_list  ->  var_list ',' var_elem .   (rule 13)
+
+    $default	reduce using rule 13 (var_list)
+
+
+
+state 24
+
+    proc_list  ->  B_PROCEDURE . IDENT @1 arg_list_dec ';' @2 block ';'   (rule 21)
+
+    IDENT	shift, and go to state 44
+
+
+
+state 25
+
+    func_list  ->  B_FUNCTION . IDENT @3 arg_list_dec ';' @4 block ';'   (rule 24)
+
+    IDENT	shift, and go to state 45
+
+
+
+state 26
+
+    block_stmt  ->  B_BEGIN . @5 stmt_list B_END   (rule 41)
+
+    $default	reduce using rule 40 (@5)
+
+    @5  	go to state 46
+
+
+
+state 27
+
+    if_stmt  ->  B_IF . @7 condition B_THEN @8 statement @9 else_part   (rule 52)
+
+    $default	reduce using rule 49 (@7)
+
+    @7  	go to state 47
+
+
+
+state 28
+
+    while_stmt  ->  B_WHILE . @11 condition B_DO @12 statement   (rule 58)
+
+    $default	reduce using rule 56 (@11)
+
+    @11 	go to state 48
+
+
+
+state 29
+
+    call_stmt  ->  B_CALL . IDENT @6 actual_arg   (rule 44)
+
+    IDENT	shift, and go to state 49
+
+
+
+state 30
+
+    write_stmt  ->  WRITE . LP write_list RP   (rule 61)
+
+    LP  	shift, and go to state 50
+
+
+
+state 31
+
+    writeln_stmt  ->  WRITELN .   (rule 59)
+    writeln_stmt  ->  WRITELN . LP write_list RP   (rule 60)
+
+    LP  	shift, and go to state 51
+
+    $default	reduce using rule 59 (writeln_stmt)
+
+
+
+state 32
+
+    assign  ->  IDENT . ASSIGNOP expr   (rule 42)
+
+    ASSIGNOP	shift, and go to state 52
+
+
+
+state 33
+
+    proc_func_dec  ->  proc_func_dec proc_func .   (rule 16)
+
+    $default	reduce using rule 16 (proc_func_dec)
+
+
+
+state 34
+
+    proc_func  ->  proc_list .   (rule 17)
+
+    $default	reduce using rule 17 (proc_func)
+
+
+
+state 35
+
+    proc_func  ->  func_list .   (rule 18)
+
+    $default	reduce using rule 18 (proc_func)
+
+
+
+state 36
+
+    block  ->  block_start const_dec var_dec block_dec_end proc_func_dec statement .   (rule 2)
+
+    $default	reduce using rule 2 (block)
+
+
+
+state 37
+
+    statement  ->  block_stmt .   (rule 33)
+
+    $default	reduce using rule 33 (statement)
+
+
+
+state 38
+
+    statement  ->  assign .   (rule 31)
+
+    $default	reduce using rule 31 (statement)
+
+
+
+state 39
+
+    statement  ->  call_stmt .   (rule 32)
+
+    $default	reduce using rule 32 (statement)
+
+
+
+state 40
+
+    statement  ->  if_stmt .   (rule 34)
+
+    $default	reduce using rule 34 (statement)
+
+
+
+state 41
+
+    statement  ->  while_stmt .   (rule 35)
+
+    $default	reduce using rule 35 (statement)
+
+
+
+state 42
+
+    statement  ->  writeln_stmt .   (rule 36)
+
+    $default	reduce using rule 36 (statement)
+
+
+
+state 43
+
+    statement  ->  write_stmt .   (rule 37)
+
+    $default	reduce using rule 37 (statement)
+
+
+
+state 44
+
+    proc_list  ->  B_PROCEDURE IDENT . @1 arg_list_dec ';' @2 block ';'   (rule 21)
+
+    $default	reduce using rule 19 (@1)
+
+    @1  	go to state 53
+
+
+
+state 45
+
+    func_list  ->  B_FUNCTION IDENT . @3 arg_list_dec ';' @4 block ';'   (rule 24)
+
+    $default	reduce using rule 22 (@3)
+
+    @3  	go to state 54
+
+
+
+state 46
+
+    block_stmt  ->  B_BEGIN @5 . stmt_list B_END   (rule 41)
+
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    statement	go to state 55
+    stmt_list	go to state 56
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 47
+
+    if_stmt  ->  B_IF @7 . condition B_THEN @8 statement @9 else_part   (rule 52)
+
+    NUMBER	shift, and go to state 57
+    ODD 	shift, and go to state 58
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    condition	go to state 62
+    expr	go to state 63
+
+
+
+state 48
+
+    while_stmt  ->  B_WHILE @11 . condition B_DO @12 statement   (rule 58)
+
+    NUMBER	shift, and go to state 57
+    ODD 	shift, and go to state 58
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    condition	go to state 64
+    expr	go to state 63
+
+
+
+state 49
+
+    call_stmt  ->  B_CALL IDENT . @6 actual_arg   (rule 44)
+
+    $default	reduce using rule 43 (@6)
+
+    @6  	go to state 65
+
+
+
+state 50
+
+    write_stmt  ->  WRITE LP . write_list RP   (rule 61)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    STRING	shift, and go to state 66
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    write_list	go to state 67
+    write_elem	go to state 68
+    expr	go to state 69
+
+
+
+state 51
+
+    writeln_stmt  ->  WRITELN LP . write_list RP   (rule 60)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    STRING	shift, and go to state 66
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    write_list	go to state 70
+    write_elem	go to state 68
+    expr	go to state 69
+
+
+
+state 52
+
+    assign  ->  IDENT ASSIGNOP . expr   (rule 42)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 71
+
+
+
+state 53
+
+    proc_list  ->  B_PROCEDURE IDENT @1 . arg_list_dec ';' @2 block ';'   (rule 21)
+
+    LP  	shift, and go to state 72
+
+    $default	reduce using rule 25 (arg_list_dec)
+
+    arg_list_dec	go to state 73
+
+
+
+state 54
+
+    func_list  ->  B_FUNCTION IDENT @3 . arg_list_dec ';' @4 block ';'   (rule 24)
+
+    LP  	shift, and go to state 72
+
+    $default	reduce using rule 25 (arg_list_dec)
+
+    arg_list_dec	go to state 74
+
+
+
+state 55
+
+    stmt_list  ->  statement .   (rule 38)
+
+    $default	reduce using rule 38 (stmt_list)
+
+
+
+state 56
+
+    stmt_list  ->  stmt_list . ';' statement   (rule 39)
+    block_stmt  ->  B_BEGIN @5 stmt_list . B_END   (rule 41)
+
+    B_END	shift, and go to state 75
+    ';' 	shift, and go to state 76
+
+
+
+state 57
+
+    expr  ->  NUMBER .   (rule 75)
+
+    $default	reduce using rule 75 (expr)
+
+
+
+state 58
+
+    condition  ->  ODD . expr   (rule 68)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 77
+
+
+
+state 59
+
+    expr  ->  IDENT .   (rule 76)
+    expr  ->  IDENT . LP farg RP   (rule 77)
+
+    LP  	shift, and go to state 78
+
+    $default	reduce using rule 76 (expr)
+
+
+
+state 60
+
+    expr  ->  LP . expr RP   (rule 73)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 79
+
+
+
+state 61
+
+    expr  ->  SUBOP . expr   (rule 74)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 80
+
+
+
+state 62
+
+    if_stmt  ->  B_IF @7 condition . B_THEN @8 statement @9 else_part   (rule 52)
+
+    B_THEN	shift, and go to state 81
+
+
+
+state 63
+
+    condition  ->  expr . COMPOP expr   (rule 66)
+    condition  ->  expr . EQOP expr   (rule 67)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    COMPOP	shift, and go to state 82
+    EQOP	shift, and go to state 83
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+
+
+state 64
+
+    while_stmt  ->  B_WHILE @11 condition . B_DO @12 statement   (rule 58)
+
+    B_DO	shift, and go to state 88
+
+
+
+state 65
+
+    call_stmt  ->  B_CALL IDENT @6 . actual_arg   (rule 44)
+
+    LP  	shift, and go to state 89
+
+    $default	reduce using rule 45 (actual_arg)
+
+    actual_arg	go to state 90
+
+
+
+state 66
+
+    write_elem  ->  STRING .   (rule 65)
+
+    $default	reduce using rule 65 (write_elem)
+
+
+
+state 67
+
+    write_stmt  ->  WRITE LP write_list . RP   (rule 61)
+    write_list  ->  write_list . ',' write_elem   (rule 63)
+
+    RP  	shift, and go to state 91
+    ',' 	shift, and go to state 92
+
+
+
+state 68
+
+    write_list  ->  write_elem .   (rule 62)
+
+    $default	reduce using rule 62 (write_list)
+
+
+
+state 69
+
+    write_elem  ->  expr .   (rule 64)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 64 (write_elem)
+
+
+
+state 70
+
+    writeln_stmt  ->  WRITELN LP write_list . RP   (rule 60)
+    write_list  ->  write_list . ',' write_elem   (rule 63)
+
+    RP  	shift, and go to state 93
+    ',' 	shift, and go to state 92
+
+
+
+state 71
+
+    assign  ->  IDENT ASSIGNOP expr .   (rule 42)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 42 (assign)
+
+
+
+state 72
+
+    arg_list_dec  ->  LP . arg_list RP   (rule 26)
+
+    IDENT	shift, and go to state 94
+
+    arg_list	go to state 95
+    arg_elem	go to state 96
+
+
+
+state 73
+
+    proc_list  ->  B_PROCEDURE IDENT @1 arg_list_dec . ';' @2 block ';'   (rule 21)
+
+    ';' 	shift, and go to state 97
+
+
+
+state 74
+
+    func_list  ->  B_FUNCTION IDENT @3 arg_list_dec . ';' @4 block ';'   (rule 24)
+
+    ';' 	shift, and go to state 98
+
+
+
+state 75
+
+    block_stmt  ->  B_BEGIN @5 stmt_list B_END .   (rule 41)
+
+    $default	reduce using rule 41 (block_stmt)
+
+
+
+state 76
+
+    stmt_list  ->  stmt_list ';' . statement   (rule 39)
+
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    statement	go to state 99
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 77
+
+    condition  ->  ODD expr .   (rule 68)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 68 (condition)
+
+
+
+state 78
+
+    expr  ->  IDENT LP . farg RP   (rule 77)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    $default	reduce using rule 78 (farg)
+
+    expr	go to state 100
+    farg	go to state 101
+    farg_list	go to state 102
+
+
+
+state 79
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+    expr  ->  LP expr . RP   (rule 73)
+
+    RP  	shift, and go to state 103
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+
+
+state 80
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+    expr  ->  SUBOP expr .   (rule 74)
+
+
+    $default	reduce using rule 74 (expr)
+
+
+
+state 81
+
+    if_stmt  ->  B_IF @7 condition B_THEN . @8 statement @9 else_part   (rule 52)
+
+    $default	reduce using rule 50 (@8)
+
+    @8  	go to state 104
+
+
+
+state 82
+
+    condition  ->  expr COMPOP . expr   (rule 66)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 105
+
+
+
+state 83
+
+    condition  ->  expr EQOP . expr   (rule 67)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 106
+
+
+
+state 84
+
+    expr  ->  expr ADDOP . expr   (rule 69)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 107
+
+
+
+state 85
+
+    expr  ->  expr SUBOP . expr   (rule 70)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 108
+
+
+
+state 86
+
+    expr  ->  expr MULOP . expr   (rule 71)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 109
+
+
+
+state 87
+
+    expr  ->  expr DIVOP . expr   (rule 72)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 110
+
+
+
+state 88
+
+    while_stmt  ->  B_WHILE @11 condition B_DO . @12 statement   (rule 58)
+
+    $default	reduce using rule 57 (@12)
+
+    @12 	go to state 111
+
+
+
+state 89
+
+    actual_arg  ->  LP . expr_list RP   (rule 46)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr_list	go to state 112
+    expr	go to state 113
+
+
+
+state 90
+
+    call_stmt  ->  B_CALL IDENT @6 actual_arg .   (rule 44)
+
+    $default	reduce using rule 44 (call_stmt)
+
+
+
+state 91
+
+    write_stmt  ->  WRITE LP write_list RP .   (rule 61)
+
+    $default	reduce using rule 61 (write_stmt)
+
+
+
+state 92
+
+    write_list  ->  write_list ',' . write_elem   (rule 63)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    STRING	shift, and go to state 66
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    write_elem	go to state 114
+    expr	go to state 69
+
+
+
+state 93
+
+    writeln_stmt  ->  WRITELN LP write_list RP .   (rule 60)
+
+    $default	reduce using rule 60 (writeln_stmt)
+
+
+
+state 94
+
+    arg_elem  ->  IDENT .   (rule 29)
+
+    $default	reduce using rule 29 (arg_elem)
+
+
+
+state 95
+
+    arg_list_dec  ->  LP arg_list . RP   (rule 26)
+    arg_list  ->  arg_list . ',' arg_elem   (rule 28)
+
+    RP  	shift, and go to state 115
+    ',' 	shift, and go to state 116
+
+
+
+state 96
+
+    arg_list  ->  arg_elem .   (rule 27)
+
+    $default	reduce using rule 27 (arg_list)
+
+
+
+state 97
+
+    proc_list  ->  B_PROCEDURE IDENT @1 arg_list_dec ';' . @2 block ';'   (rule 21)
+
+    $default	reduce using rule 20 (@2)
+
+    @2  	go to state 117
+
+
+
+state 98
+
+    func_list  ->  B_FUNCTION IDENT @3 arg_list_dec ';' . @4 block ';'   (rule 24)
+
+    $default	reduce using rule 23 (@4)
+
+    @4  	go to state 118
+
+
+
+state 99
+
+    stmt_list  ->  stmt_list ';' statement .   (rule 39)
+
+    $default	reduce using rule 39 (stmt_list)
+
+
+
+state 100
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+    farg_list  ->  expr .   (rule 80)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 80 (farg_list)
+
+
+
+state 101
+
+    expr  ->  IDENT LP farg . RP   (rule 77)
+
+    RP  	shift, and go to state 119
+
+
+
+state 102
+
+    farg  ->  farg_list .   (rule 79)
+    farg_list  ->  farg_list . ',' expr   (rule 81)
+
+    ',' 	shift, and go to state 120
+
+    $default	reduce using rule 79 (farg)
+
+
+
+state 103
+
+    expr  ->  LP expr RP .   (rule 73)
+
+    $default	reduce using rule 73 (expr)
+
+
+
+state 104
+
+    if_stmt  ->  B_IF @7 condition B_THEN @8 . statement @9 else_part   (rule 52)
+
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    statement	go to state 121
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 105
+
+    condition  ->  expr COMPOP expr .   (rule 66)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 66 (condition)
+
+
+
+state 106
+
+    condition  ->  expr EQOP expr .   (rule 67)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 67 (condition)
+
+
+
+state 107
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr ADDOP expr .   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 69 (expr)
+
+
+
+state 108
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr SUBOP expr .   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 70 (expr)
+
+
+
+state 109
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr MULOP expr .   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+
+    $default	reduce using rule 71 (expr)
+
+
+
+state 110
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+    expr  ->  expr DIVOP expr .   (rule 72)
+
+
+    $default	reduce using rule 72 (expr)
+
+
+
+state 111
+
+    while_stmt  ->  B_WHILE @11 condition B_DO @12 . statement   (rule 58)
+
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    statement	go to state 122
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 112
+
+    actual_arg  ->  LP expr_list . RP   (rule 46)
+    expr_list  ->  expr_list . ',' expr   (rule 48)
+
+    RP  	shift, and go to state 123
+    ',' 	shift, and go to state 124
+
+
+
+state 113
+
+    expr_list  ->  expr .   (rule 47)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 47 (expr_list)
+
+
+
+state 114
+
+    write_list  ->  write_list ',' write_elem .   (rule 63)
+
+    $default	reduce using rule 63 (write_list)
+
+
+
+state 115
+
+    arg_list_dec  ->  LP arg_list RP .   (rule 26)
+
+    $default	reduce using rule 26 (arg_list_dec)
+
+
+
+state 116
+
+    arg_list  ->  arg_list ',' . arg_elem   (rule 28)
+
+    IDENT	shift, and go to state 94
+
+    arg_elem	go to state 125
+
+
+
+state 117
+
+    proc_list  ->  B_PROCEDURE IDENT @1 arg_list_dec ';' @2 . block ';'   (rule 21)
+
+    $default	reduce using rule 3 (block_start)
+
+    block	go to state 126
+    block_start	go to state 2
+
+
+
+state 118
+
+    func_list  ->  B_FUNCTION IDENT @3 arg_list_dec ';' @4 . block ';'   (rule 24)
+
+    $default	reduce using rule 3 (block_start)
+
+    block	go to state 127
+    block_start	go to state 2
+
+
+
+state 119
+
+    expr  ->  IDENT LP farg RP .   (rule 77)
+
+    $default	reduce using rule 77 (expr)
+
+
+
+state 120
+
+    farg_list  ->  farg_list ',' . expr   (rule 81)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 128
+
+
+
+state 121
+
+    if_stmt  ->  B_IF @7 condition B_THEN @8 statement . @9 else_part   (rule 52)
+
+    $default	reduce using rule 51 (@9)
+
+    @9  	go to state 129
+
+
+
+state 122
+
+    while_stmt  ->  B_WHILE @11 condition B_DO @12 statement .   (rule 58)
+
+    $default	reduce using rule 58 (while_stmt)
+
+
+
+state 123
+
+    actual_arg  ->  LP expr_list RP .   (rule 46)
+
+    $default	reduce using rule 46 (actual_arg)
+
+
+
+state 124
+
+    expr_list  ->  expr_list ',' . expr   (rule 48)
+
+    NUMBER	shift, and go to state 57
+    IDENT	shift, and go to state 59
+    LP  	shift, and go to state 60
+    SUBOP	shift, and go to state 61
+
+    expr	go to state 130
+
+
+
+state 125
+
+    arg_list  ->  arg_list ',' arg_elem .   (rule 28)
+
+    $default	reduce using rule 28 (arg_list)
+
+
+
+state 126
+
+    proc_list  ->  B_PROCEDURE IDENT @1 arg_list_dec ';' @2 block . ';'   (rule 21)
+
+    ';' 	shift, and go to state 131
+
+
+
+state 127
+
+    func_list  ->  B_FUNCTION IDENT @3 arg_list_dec ';' @4 block . ';'   (rule 24)
+
+    ';' 	shift, and go to state 132
+
+
+
+state 128
+
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+    farg_list  ->  farg_list ',' expr .   (rule 81)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 81 (farg_list)
+
+
+
+state 129
+
+    if_stmt  ->  B_IF @7 condition B_THEN @8 statement @9 . else_part   (rule 52)
+
+    B_ELSE	shift, and go to state 133
+
+    B_ELSE	[reduce using rule 53 (else_part)]
+    $default	reduce using rule 53 (else_part)
+
+    else_part	go to state 134
+
+
+
+state 130
+
+    expr_list  ->  expr_list ',' expr .   (rule 48)
+    expr  ->  expr . ADDOP expr   (rule 69)
+    expr  ->  expr . SUBOP expr   (rule 70)
+    expr  ->  expr . MULOP expr   (rule 71)
+    expr  ->  expr . DIVOP expr   (rule 72)
+
+    ADDOP	shift, and go to state 84
+    SUBOP	shift, and go to state 85
+    MULOP	shift, and go to state 86
+    DIVOP	shift, and go to state 87
+
+    $default	reduce using rule 48 (expr_list)
+
+
+
+state 131
+
+    proc_list  ->  B_PROCEDURE IDENT @1 arg_list_dec ';' @2 block ';' .   (rule 21)
+
+    $default	reduce using rule 21 (proc_list)
+
+
+
+state 132
+
+    func_list  ->  B_FUNCTION IDENT @3 arg_list_dec ';' @4 block ';' .   (rule 24)
+
+    $default	reduce using rule 24 (func_list)
+
+
+
+state 133
+
+    else_part  ->  B_ELSE . @10 statement   (rule 55)
+
+    $default	reduce using rule 54 (@10)
+
+    @10 	go to state 135
+
+
+
+state 134
+
+    if_stmt  ->  B_IF @7 condition B_THEN @8 statement @9 else_part .   (rule 52)
+
+    $default	reduce using rule 52 (if_stmt)
+
+
+
+state 135
+
+    else_part  ->  B_ELSE @10 . statement   (rule 55)
+
+    B_BEGIN	shift, and go to state 26
+    B_IF	shift, and go to state 27
+    B_WHILE	shift, and go to state 28
+    B_CALL	shift, and go to state 29
+    WRITE	shift, and go to state 30
+    WRITELN	shift, and go to state 31
+    IDENT	shift, and go to state 32
+
+    $default	reduce using rule 30 (statement)
+
+    statement	go to state 136
+    block_stmt	go to state 37
+    assign	go to state 38
+    call_stmt	go to state 39
+    if_stmt	go to state 40
+    while_stmt	go to state 41
+    writeln_stmt	go to state 42
+    write_stmt	go to state 43
+
+
+
+state 136
+
+    else_part  ->  B_ELSE @10 statement .   (rule 55)
+
+    $default	reduce using rule 55 (else_part)
+
+
+
+state 137
+
+    $   	go to state 138
+
+
+
+state 138
+
+    $   	go to state 139
+
+
+
+state 139
+
+    $default	accept
