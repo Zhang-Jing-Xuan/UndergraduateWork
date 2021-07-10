@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "calc.tab.h" // bison -d calc.y
+// int yylex();
 %}
 
 /* %option noyywrap */

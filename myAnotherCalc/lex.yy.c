@@ -368,8 +368,9 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>
 #include "calc.tab.h" // bison -d calc.y
+// int yylex();
 /* %option noyywrap */
-#line 373 "lex.yy.c"
+#line 374 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -520,9 +521,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 9 "calc.l"
+#line 10 "calc.l"
 
-#line 526 "lex.yy.c"
+#line 527 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -607,25 +608,25 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "calc.l"
+#line 11 "calc.l"
 {yylval.f = atof(yytext);return NUM;}    
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 11 "calc.l"
+#line 12 "calc.l"
 {return yytext[0];}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "calc.l"
+#line 13 "calc.l"
 { ;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 13 "calc.l"
+#line 14 "calc.l"
 ECHO;
 	YY_BREAK
-#line 629 "lex.yy.c"
+#line 630 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1511,7 +1512,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 13 "calc.l"
+#line 14 "calc.l"
 
 
 int yywrap (void) {return -1;}
