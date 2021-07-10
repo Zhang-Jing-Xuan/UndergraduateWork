@@ -13,4 +13,4 @@
 [ \t\f\v\n]                     { ;}
 %%
 
-int yywrap (void) {return -1;}
+int yywrap (void) {return 1;}

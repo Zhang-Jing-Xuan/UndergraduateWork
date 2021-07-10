@@ -1515,4 +1515,4 @@ int main()
 #line 14 "calc.l"
 
 
-int yywrap (void) {return -1;}
+int yywrap (void) {return 1;}
