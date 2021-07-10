@@ -11,6 +11,6 @@ int yylex();
 [ \t\n]                ;
 [-+=;]           	   {return yytext[0];}
 .                      {ECHO; yyerror ("unexpected character");}
-
+ /* print,exit_command,identifier,number都在calc.tab.h中定义*/ 
 %%
 int yywrap (void) {return 1;}
