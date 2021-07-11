@@ -1,3 +1,0 @@
-C:/Code/PL_0Compiler/Others/completeExample/build/CMakeFiles/rebuild_cache.dir
-C:/Code/PL_0Compiler/Others/completeExample/build/CMakeFiles/edit_cache.dir
-C:/Code/PL_0Compiler/Others/completeExample/build/CMakeFiles/main.dir

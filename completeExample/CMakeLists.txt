@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+
 project(main)
 SET(CMAKE_CXX_COMPILER_ENV_VAR "CXX")
 SET(CMAKE_CXX_FLAGS "-std=c++11")

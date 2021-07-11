@@ -1,19 +1,20 @@
-## bison -d yacc.y
+## 编译运行
 
-## flex lex.l
+```bash
+bison -d yacc.y
+flex lex.l
+g++ -c lex.yy.c
+g++ -c yacc.tab.c
+g++ lex.yy.o yacc.tab.o -o main
+./main
+```
 
-## g++ -c lex.yy.c
+或者
 
-## g++ -c yacc.tab.c
-
-## g++ lex.yy.o yacc.tab.o -o main
-
-## ./main
-
---------------------------------------------
-
-## cd build
-
-## make
-
-## ./main
+```bash
+mkdir build
+cd build
+make
+将file.txt复制到build目录下
+./main
+```
