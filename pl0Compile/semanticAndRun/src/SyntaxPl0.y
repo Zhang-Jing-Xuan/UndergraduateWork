@@ -221,9 +221,9 @@ VarType     : INT_ {
 ProDec      : ProDec ProceHead SubPro SEMI {
                 all_type_val_value p;
                 init_for_gen_pcode(p);
-                gen(instruction::OPR,0,0,p);
-                current_Level--;
-                symtable_pop();
+                gen(instruction::OPR,0,0,p); /*表示一个程序结束，需要将程序退栈，同时加上指令OPR 0 0代表结束*/
+                current_Level--; /*程序结束后退栈*/
+                symtable_pop();  /*把该过程的ID清空*/
                 addr=2+symtable_size();
               }
             | ProceHead SubPro SEMI {
@@ -353,7 +353,7 @@ GetDi       : GetDi COMMA Expr {
               }
             ;
 AssignS     : Identifier ASSIGN Expr {
-                int pos=find_sign($1.id);
+                int pos=find_sign($1.id); //找sign是否存在，返回在sign_stack的位置
                 pos+=$1.offset;
                 if(symtable[pos].symtype_!=Symbol::var_)
                 { // type error
@@ -445,7 +445,7 @@ Condition   : Expr CMP Expr {
                 {
                   all_type_val_value p;
                   init_for_gen_pcode(p);
-                  gen(instruction::OPR,0,6,p);
+                  gen(instruction::OPR,0,6,p); /*指令OPR 0 6，栈顶奇偶元素判断*/
                 }
                 else
                 {
@@ -455,10 +455,10 @@ Condition   : Expr CMP Expr {
               }
             ;
 CondiS      : IF Condition BeforeThen THEN ComplexS SEMI %prec LOWERELSE {
-                backpatch(backPatch_table[backPatch_table_top--],code_line);
+                backpatch(backPatch_table[backPatch_table_top--],code_line); /*记录条件判断的位置*/
               }
             | IF Condition BeforeThen THEN ComplexS SEMI ELSE BeforeElseDo ComplexS SEMI {
-                backpatch(backPatch_table[backPatch_table_top--],code_line);
+                backpatch(backPatch_table[backPatch_table_top--],code_line); /*记录条件判断的位置*/
               }
             ;
 BeforeThen  : {
@@ -804,7 +804,7 @@ Call_Func       : CALL SL_PAREN IDENTIFIER SR_PAREN {
                 gen(instruction::CAL,current_Level-pro_stack[pos].level,pro_stack[pos].pos-1,p);
               }
             ;
-Read_Func       : READ SL_PAREN Identifier SR_PAREN{
+Read_Func       : READ SL_PAREN Identifier SR_PAREN{ /*循环中标识符的输入，首先需要查找这个标识符是否存在，如果存在，执行OPR 0 16从屏幕中读入一个输入，之后执行STO L A将其送入对应的变量*/
                 int pos=find_sign($3.id);
                 pos+=$3.offset;
                 all_type_val_value p;
@@ -812,8 +812,8 @@ Read_Func       : READ SL_PAREN Identifier SR_PAREN{
                 if(symtable[pos].var.type_==0||symtable[pos].var.type_==4)
                 {
                   p.type_=all_type_val_value::int_;
-                  gen(instruction::OPR,0,16,p);
-                  gen(instruction::STO,current_Level-symtable[pos].level,symtable[pos].addr,p);
+                  gen(instruction::OPR,0,16,p); /*从命令行读入一个并放入栈顶*/
+                  gen(instruction::STO,current_Level-symtable[pos].level,symtable[pos].addr,p); /*栈顶的值放入变量ID中*/
                 }
                 if(symtable[pos].var.type_==1||symtable[pos].var.type_==5)
                 {
@@ -836,7 +836,7 @@ Read_Func       : READ SL_PAREN Identifier SR_PAREN{
                 
               }
             ;
-Write_Func      : WRITE SL_PAREN Identifier SR_PAREN{
+Write_Func      : WRITE SL_PAREN Identifier SR_PAREN{ /*写，执行OPR 0 14——OPR 0 15，栈顶值输出到屏幕，屏幕输出换行*/
                 int pos=find_sign($3.id);
                 pos+=$3.offset;
                 all_type_val_value p;
