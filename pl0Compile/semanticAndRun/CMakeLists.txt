@@ -15,6 +15,12 @@ else()
     message ("Cannot find bison")
 endif()
 
+if(FLEX_FOUND)
+    message ("flex found")
+else()
+    message ("Cannot find bison")
+endif()
+
 flex_target(SCANNER src/LexicalPl0.l  ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
 bison_target(PARSER src/SyntaxPl0.y  ${CMAKE_CURRENT_BINARY_DIR}/parser.cpp)
 ADD_FLEX_BISON_DEPENDENCY(SCANNER PARSER)
