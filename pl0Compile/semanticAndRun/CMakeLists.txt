@@ -18,7 +18,7 @@ endif()
 if(FLEX_FOUND)
     message ("flex found")
 else()
-    message ("Cannot find bison")
+    message ("Cannot find flex")
 endif()
 
 flex_target(SCANNER src/LexicalPl0.l  ${CMAKE_CURRENT_BINARY_DIR}/scanner.cpp)
