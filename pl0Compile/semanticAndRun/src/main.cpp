@@ -1,5 +1,5 @@
 #include"define.h"
-#include"SyntaxPl0.tab.h"
+#include"parser.cpp.h"
 #include<fstream>
 #define YELLOW  "\033[33m"      /* Yellow */
 #define RESET   "\033[0m"

@@ -1,7 +1,7 @@
 %option noyywrap
 %{
 
-#include"SyntaxPl0.tab.h"
+#include "parser.cpp.h"
 #include<iostream>
 extern int yylex(void);
 extern int yywarp(void);
