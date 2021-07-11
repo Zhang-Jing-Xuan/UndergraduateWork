@@ -60,8 +60,8 @@ void read_file(string file_name)
         if (line.find("->") != -1)
         {
             //cout<<line<<endl;
-            vector<string> a = parse(line);
-            reduce(a);
+            vector<string> a = parse(line); // 将line按照空格分离开来
+            reduce(a); // 算出父节点
             if (a[0] == "Program")
                 root = syntax.top();
         }
@@ -83,7 +83,7 @@ void reduce(vector<string> words)
         syntax.pop();
     }
     //逆转
-    reverse(parent->children.begin(), parent->children.end());
+    reverse(parent->children.begin(), parent->children.end()); // 因为是栈，先进后出
 
     syntax.push(parent);
 }
@@ -99,7 +99,7 @@ vector<string> parse(string line)
     return ans;
 }
 
-void traversal(Node *dot)
+void traversal(Node *dot) // 遍历点
 {
     if (!dot)
         return;
@@ -116,7 +116,7 @@ void traversal(Node *dot)
     {
         cout << "    " << node_name_in_gv << "[label=\"" << dot->val << "\"];" << endl;
     }
-    else
+    else // peripheries=2 双圆
     {
         cout << "    " << node_name_in_gv << "[label=\"" << dot->val << "\",peripheries=2, style=filled, color=\"#eecc80\"];" << endl;
     }
@@ -127,7 +127,7 @@ void traversal(Node *dot)
     }
 }
 
-void traversal_twice(Node *dot)
+void traversal_twice(Node *dot) // 遍历边
 {
     if (!dot)
         return;
