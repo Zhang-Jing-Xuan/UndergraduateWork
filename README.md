@@ -6,6 +6,22 @@
 
 ## LR1->LR1.cpp  LR1.txt  ------ LR(1)自底向上语法分析
 
+# AnalysisWordExample
+
+## 词法分析程序样例
+
+# AnalysisWord
+
+## 词法分析实验
+
+# AnalysisGrammar
+
+## 语法分析实验
+
+# compileBigJobComplete
+
+## 编译原理课程设计 
+
 # lex learning
 
 ## myscanner ------ flex的一个例子 [lex turtorial](https://www.youtube.com/watch?v=54bo1qaHAfk "lex turtorial")
