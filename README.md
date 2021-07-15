@@ -14,11 +14,11 @@
 
 ## 词法分析实验
 
-# AnalysisGrammar
+# AnalysisGrammar（包括流程图）
 
 ## 语法分析实验
 
-# compileBigJobComplete
+# compileBigJobComplete（包括流程图）
 
 ## 编译原理课程设计 
 
