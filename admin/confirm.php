@@ -1,5 +1,6 @@
 <?php
-include_once 'inc/config.inc.php';
+// include_once 'inc/config.inc.php';
+include_once '../inc/config.inc.php';
 $_GET['message']=htmlspecialchars($_GET['message']);
 if(!isset($_GET['message'])||!isset($_GET['url'])||!isset($_GET['return_url'])){
     exit();
