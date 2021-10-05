@@ -10,5 +10,6 @@
     define('SUB_URL',str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\','/',SA_PATH)).'/');
     // echo str_replace($_SERVER['DOCUMENT_ROOT'],'',str_replace('\\','/',SA_PATH)).'/';
     // var_dump($_SERVER['DOCUMENT_ROOT']);
+    error_reporting(0); ##
 ?>
 
