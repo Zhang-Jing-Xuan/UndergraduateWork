@@ -55,7 +55,7 @@ create table collect(
     id int(10) unsigned auto_increment primary key,
     content_id int(10) unsigned,
     member_id int(10) unsigned,
-    time datetime,
+    time datetime
 );
 create table info(
     id int(10) unsigned auto_increment primary key,
@@ -84,12 +84,12 @@ begin
     if(@cnt+1>100) then 
 		insert into XXX values(XXX);
 	end if;
-end
+end $
 delimiter ;
 
 delimiter $ 
 create trigger after_delete_content after delete on content for each row
 begin
     delete from reply where content_id not in (select id from content);
-end
+end $
 delimiter ;
