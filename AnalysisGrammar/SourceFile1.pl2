@@ -1,0 +1,22 @@
+const c1=2,c2=10;
+var num1,Counts,Totalsum;
+
+procedure func1;
+var y1,y2;
+begin
+y1:=1;;
+end;
+
+begin
+  num1:=c1;;
+  if num1<=0) 
+    num1:=num1-1;
+ else
+    num1:=num1;;
+  while x1<=x2 do
+    x1:=x1+1;;
+ not (Totalsum>0)
+  Totalsum:=1;;
+ call func1
+end.
+

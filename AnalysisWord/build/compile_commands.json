@@ -1,0 +1,12 @@
+[
+{
+  "directory": "C:/Code/PL_0Compiler/WordAnalysis/build",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -o CMakeFiles\\lex.dir\\PL0Complier.cpp.obj -c C:\\Code\\PL_0Compiler\\WordAnalysis\\PL0Complier.cpp",
+  "file": "C:/Code/PL_0Compiler/WordAnalysis/PL0Complier.cpp"
+},
+{
+  "directory": "C:/Code/PL_0Compiler/WordAnalysis/build",
+  "command": "C:\\msys64\\mingw64\\bin\\x86_64-w64-mingw32-g++.exe   -g -o CMakeFiles\\lex.dir\\Lexical.cpp.obj -c C:\\Code\\PL_0Compiler\\WordAnalysis\\Lexical.cpp",
+  "file": "C:/Code/PL_0Compiler/WordAnalysis/Lexical.cpp"
+}
+]
