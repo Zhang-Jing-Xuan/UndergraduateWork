@@ -1,0 +1,8 @@
+cd /Users/admin/Desktop/CL/C++/pyfuntion/pycallC
+gcc -fPIC -shared great_module.c -o great_module.so -I/usr/include/python2.7/ -lpython2.7
+python pycallC.py
+
+
+
+
+参考文献：https://www.zhihu.com/question/23003213
