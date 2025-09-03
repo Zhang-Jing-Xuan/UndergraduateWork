@@ -1,5 +1,0 @@
-root
-root
-select * from s,stu
-select * s
-exit
